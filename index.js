@@ -16,10 +16,12 @@ const schema = require("./ORM-Schema/schema");
 
 const sequelize = require("./ORM-Schema/database");
 
-const FimModel = require("./ORM-Schema/filmModel");
-const CategoryModel = require("./ORM-Schema/categoryModel");
+const Film = require("./ORM-Schema/filmModel");
+const Category = require("./ORM-Schema/categoryModel");
+const Review = require("./ORM-Schema/reviewModel");
 
 app.use("/uploads", express.static("uploads"));
+app.use("/films/uploads", express.static("uploads"));
 
 app.use(cors());
 app.use(
@@ -30,10 +32,13 @@ app.use(
   })
 );
 
+Review.belongsTo(Film, { constraints: true, onDelete: "CASCADE" });
+Film.hasMany(Review);
+
 sequelize
   .sync()
   .then((result) => {
-    console.log(result);
+    //console.log(result);
     app.listen(PORT, () => {
       console.log(`Server Running on port ${PORT}`);
     });

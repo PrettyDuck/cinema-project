@@ -19,6 +19,9 @@ Film.init(
     year: {
       type: DataTypes.INTEGER,
     },
+    filmDirector: {
+      type: DataTypes.STRING,
+    },
     filmDescription: {
       type: DataTypes.STRING,
     },
@@ -32,7 +35,7 @@ Film.init(
   {
     sequelize,
     modelName: "ORM_film",
-    timestamps: false
+    timestamps: false,
   }
 );
 

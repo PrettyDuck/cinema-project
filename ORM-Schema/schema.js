@@ -1,5 +1,6 @@
 const Film = require("./filmModel");
 const Category = require("./categoryModel");
+const Review = require("./reviewModel");
 
 const {
   GraphQLSchema,
@@ -28,6 +29,7 @@ const FilmType = new GraphQLObjectType({
     name: { type: GraphQLNonNull(GraphQLString) },
     categoryId: { type: GraphQLNonNull(GraphQLString) },
     year: { type: GraphQLNonNull(GraphQLInt) },
+    filmDirector: { type: GraphQLNonNull(GraphQLString) },
     filmDescription: { type: GraphQLNonNull(GraphQLString) },
     averageRating: { type: GraphQLNonNull(GraphQLFloat) },
     coverImage: { type: GraphQLNonNull(GraphQLString) },
@@ -53,6 +55,16 @@ const FilmType = new GraphQLObjectType({
   }),
 });
 
+const ReviewType = new GraphQLObjectType({
+  name: "Review",
+  description: "Review Description",
+  fields: () => ({
+    id: { type: GraphQLInt },
+    reviewOwnerName: { type: GraphQLNonNull(GraphQLString) },
+    reviewText: { type: GraphQLNonNull(GraphQLString) },
+  }),
+});
+
 const RootMutation = new GraphQLObjectType({
   name: "Mutation",
   description: "Root Mutation",
@@ -64,6 +76,7 @@ const RootMutation = new GraphQLObjectType({
         name: { type: GraphQLNonNull(GraphQLString) },
         categoryId: { type: GraphQLNonNull(GraphQLList(GraphQLInt)) },
         year: { type: GraphQLNonNull(GraphQLInt) },
+        filmDirector: { type: GraphQLNonNull(GraphQLString) },
         filmDescription: { type: GraphQLNonNull(GraphQLString) },
         averageRating: { type: GraphQLNonNull(GraphQLFloat) },
         coverImage: { type: GraphQLNonNull(GraphQLString) },
@@ -73,6 +86,7 @@ const RootMutation = new GraphQLObjectType({
           name: args.name,
           categoryId: args.categoryId.join(), // Passing array as string
           year: args.year,
+          filmDirector: args.filmDirector,
           filmDescription: args.filmDescription,
           averageRating: args.averageRating,
           coverImage: args.coverImage,
@@ -106,6 +120,7 @@ const RootMutation = new GraphQLObjectType({
         name: { type: GraphQLNonNull(GraphQLString) },
         categoryId: { type: GraphQLNonNull(GraphQLList(GraphQLInt)) },
         year: { type: GraphQLNonNull(GraphQLInt) },
+        filmDirector: { type: GraphQLNonNull(GraphQLString) },
         filmDescription: { type: GraphQLNonNull(GraphQLString) },
         averageRating: { type: GraphQLNonNull(GraphQLFloat) },
         coverImage: { type: GraphQLNonNull(GraphQLString) },
@@ -115,6 +130,7 @@ const RootMutation = new GraphQLObjectType({
           name: args.name,
           categoryId: args.categoryId.join(),
           year: args.year,
+          filmDirector: args.filmDirector,
           filmDescription: args.filmDescription,
           averageRating: args.averageRating,
           coverImage: args.coverImage,
@@ -124,6 +140,7 @@ const RootMutation = new GraphQLObjectType({
           target.name = UpdatedFilm.name;
           target.categoryId = UpdatedFilm.categoryId;
           target.year = UpdatedFilm.year;
+          target.filmDirector = UpdatedFilm.filmDirector;
           target.filmDescription = UpdatedFilm.filmDescription;
           target.averageRating = UpdatedFilm.averageRating;
           target.coverImage = UpdatedFilm.coverImage;
@@ -144,6 +161,30 @@ const RootMutation = new GraphQLObjectType({
         try {
           const res = await Film.destroy({ where: { id: args.id } });
           return console.log("Film Deleted");
+        } catch (err) {
+          console.log(err);
+        }
+      },
+    },
+    addReview: {
+      type: ReviewType,
+      description: "Add new film review",
+      args: {
+        reviewOwnerName: { type: GraphQLNonNull(GraphQLString) },
+        reviewText: { type: GraphQLNonNull(GraphQLString) },
+        FilmId: { type: GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: async (parent, args) => {
+        const review = {
+          reviewOwnerName: args.reviewOwnerName,
+          reviewText: args.reviewText,
+        };
+        try {
+          const targetFilm = await Film.findByPk(args.FilmId);
+          //console.log(Film.prototype);
+          const res = await targetFilm.createORM_film_review(review);
+          console.log(res)
+          return res;
         } catch (err) {
           console.log(err);
         }
@@ -177,6 +218,23 @@ const RootQuery = new GraphQLObjectType({
       resolve: async () => {
         try {
           const res = await Film.findAll();
+          return res;
+        } catch (err) {
+          console.log(err);
+        }
+      },
+    },
+    reviews: {
+      type: new GraphQLList(ReviewType),
+      description: "List of all film reviews",
+      args: {
+        filmId: { type: GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: async (parent, args) => {
+        try {
+          const targetFilm = await Film.findByPk(args.filmId);
+          const res = await targetFilm.getORM_film_reviews();
+          console.log(res);
           return res;
         } catch (err) {
           console.log(err);

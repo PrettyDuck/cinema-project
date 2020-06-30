@@ -15286,6 +15286,9 @@ video {
 .w-64 {
   width: 16rem;
 }
+.w-128 {
+  width: 32rem;
+}
 
 .w-auto {
   width: auto;

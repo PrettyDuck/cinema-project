@@ -2,10 +2,6 @@ import React from 'react';
 import Films from '../films/Films';
 
 const Home = () => {
-  return (
-    <div className='mb-auto'>
-      <Films />
-    </div>
-  );
+  return <Films />;
 };
 export default Home;
