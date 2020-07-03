@@ -13,6 +13,9 @@ Review.init(
     reviewOwnerName: {
       type: DataTypes.STRING,
     },
+    reviewPoints: {
+      type: DataTypes.INTEGER,
+    },
     reviewText: {
       type: DataTypes.STRING,
     },

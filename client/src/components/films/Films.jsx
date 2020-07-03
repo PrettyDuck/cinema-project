@@ -10,12 +10,10 @@ const Films = () => {
       {loading && <div>Loading...</div>}
       {error && <div>{error.message}</div>}
       {!loading && data.films && (
-        <div className='px-32 py-4'>
-          <div className='grid gap-4 grid-cols-4'>
-            {data.films.map((film) => (
-              <FilmItem film={film} key={film.id} />
-            ))}
-          </div>
+        <div className='grid gap-2 grid-cols-4 mx-24 my-12'>
+          {data.films.map((film) => (
+            <FilmItem film={film} key={film.id} />
+          ))}
         </div>
       )}
     </>

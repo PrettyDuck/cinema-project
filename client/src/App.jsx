@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useReducer } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
@@ -7,17 +7,24 @@ import Home from './components/pages/Home';
 import SearchFilms from './components/pages/SearchFilms';
 import Film from './components/pages/Film';
 
+import ReviewContext from '../src/reviewContext';
+import reviewReducer from '../src/reviewReducer';
+
 function App() {
+  const initialState = useContext(ReviewContext);
+  const [state, dispatch] = useReducer(reviewReducer, initialState);
   return (
     <Router>
       <div className='flex flex-col h-screen'>
         <Header />
         <div className='mb-auto'>
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route exact path='/search' component={SearchFilms} />
-            <Route exact path='/films/:id' component={Film} />
-          </Switch>
+          <ReviewContext.Provider value={{ state, dispatch }}>
+            <Switch>
+              <Route exact path='/' component={Home} />
+              <Route exact path='/search' component={SearchFilms} />
+              <Route exact path='/films/:id' component={Film} />
+            </Switch>
+          </ReviewContext.Provider>
         </div>
         <Footer />
       </div>

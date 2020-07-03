@@ -61,6 +61,7 @@ const ReviewType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLInt },
     reviewOwnerName: { type: GraphQLNonNull(GraphQLString) },
+    reviewPoints: { type: GraphQLNonNull(GraphQLInt) },
     reviewText: { type: GraphQLNonNull(GraphQLString) },
   }),
 });
@@ -171,19 +172,21 @@ const RootMutation = new GraphQLObjectType({
       description: "Add new film review",
       args: {
         reviewOwnerName: { type: GraphQLNonNull(GraphQLString) },
+        reviewPoints: { type: GraphQLNonNull(GraphQLInt) },
         reviewText: { type: GraphQLNonNull(GraphQLString) },
-        FilmId: { type: GraphQLNonNull(GraphQLInt) },
+        filmId: { type: GraphQLNonNull(GraphQLInt) },
       },
       resolve: async (parent, args) => {
         const review = {
           reviewOwnerName: args.reviewOwnerName,
+          reviewPoints: args.reviewPoints,
           reviewText: args.reviewText,
         };
         try {
-          const targetFilm = await Film.findByPk(args.FilmId);
+          const targetFilm = await Film.findByPk(args.filmId);
           //console.log(Film.prototype);
           const res = await targetFilm.createORM_film_review(review);
-          console.log(res)
+          console.log(res);
           return res;
         } catch (err) {
           console.log(err);
