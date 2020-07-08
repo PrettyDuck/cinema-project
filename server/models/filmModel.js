@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
-const sequelize = require("./database");
+const sequelize = require("../db/database");
 
 class Film extends Model {}
 Film.init(
@@ -34,7 +34,7 @@ Film.init(
   },
   {
     sequelize,
-    modelName: "ORM_film",
+    modelName: "film",
     timestamps: false,
   }
 );

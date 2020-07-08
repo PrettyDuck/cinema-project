@@ -1,6 +1,6 @@
-const Film = require("./filmModel");
-const Category = require("./categoryModel");
-const Review = require("./reviewModel");
+const Film = require("./models/filmModel");
+const Category = require("./models/categoryModel");
+const Review = require("./models/reviewModel");
 
 const {
   GraphQLSchema,
@@ -185,7 +185,7 @@ const RootMutation = new GraphQLObjectType({
         try {
           const targetFilm = await Film.findByPk(args.filmId);
           //console.log(Film.prototype);
-          const res = await targetFilm.createORM_film_review(review);
+          const res = await targetFilm.createFilm_review(review);
           console.log(res);
           return res;
         } catch (err) {
@@ -221,6 +221,7 @@ const RootQuery = new GraphQLObjectType({
       resolve: async () => {
         try {
           const res = await Film.findAll();
+          console.log(res)
           return res;
         } catch (err) {
           console.log(err);
@@ -236,7 +237,7 @@ const RootQuery = new GraphQLObjectType({
       resolve: async (parent, args) => {
         try {
           const targetFilm = await Film.findByPk(args.filmId);
-          const res = await targetFilm.getORM_film_reviews();
+          const res = await targetFilm.getFilm_reviews();
           console.log(res);
           return res;
         } catch (err) {

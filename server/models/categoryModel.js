@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
-const sequelize = require("./database");
+const sequelize = require("../db/database");
 
 class Category extends Model {}
 Category.init(
@@ -16,7 +16,7 @@ Category.init(
   },
   {
     sequelize,
-    modelName: "ORM_film_category",
+    modelName: "film_category",
     timestamps: false
   }
 );

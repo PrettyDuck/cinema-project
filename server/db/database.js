@@ -1,10 +1,8 @@
 const Sequelize = require("sequelize");
 
-
-
 const sequelize = new Sequelize("filmsdb", "root", "Redoctopus353", {
-  dialect: "mysql",
-  host: "localhost",
+  host:"mysqlHOST",
+  dialect: "mysql"
 });
 
 module.exports = sequelize;
