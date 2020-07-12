@@ -20,7 +20,7 @@ export class ReviewResolver {
     }
   }
   @Query(() => [ReviewType])
-  async getFilmReviews(@Arg("filmId", () => Int) filmId: number) {
+  async reviews(@Arg("filmId", () => Int) filmId: number) {
     try {
       const targetFilm: any = await Film.findByPk(filmId);
       const res = await targetFilm.getFilm_reviews();

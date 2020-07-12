@@ -6,6 +6,8 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "server": "nodemon --exec ts-node src/index.ts",
+    "client": "npm start --prefix ../client",
+    "dev": "concurrently \"npm run server\" \"npm run client\" ",
     "build": "tsc"
   },
   "keywords": [],

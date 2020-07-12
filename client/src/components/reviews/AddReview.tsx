@@ -10,7 +10,7 @@ const AddReview = ({ targetFilmId }) => {
 
   const [addReview] = useMutation(ADD_NEW_FILM_REVIEW, {
     update(cache, { data: { addReview } }) {
-      const { reviews } = cache.readQuery({
+      const { reviews }:any = cache.readQuery({
         query: GET_FILM_REVIEWS,
         variables: { filmId: parseInt(targetFilmId) },
       });
@@ -25,12 +25,12 @@ const AddReview = ({ targetFilmId }) => {
     },
   });
   const [review, setReview] = useState({
-    reviewPoints: 0,
-    reviewOwnerName: '',
+    ratingPoint: 0,
+    ownerName: '',
     reviewText: '',
   });
 
-  const { reviewPoints, reviewOwnerName, reviewText } = review;
+  const { ratingPoint, ownerName, reviewText } = review;
 
   const onChange = (e) => {
     setReview({
@@ -42,27 +42,27 @@ const AddReview = ({ targetFilmId }) => {
   const changeRating = (nextValue, prevValue, name) => {
     setReview({
       ...review,
-      reviewPoints: nextValue,
+      ratingPoint: nextValue,
     });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (reviewOwnerName === '' || reviewOwnerName === '') {
+    if (ownerName === '' || reviewText === '') {
       console.log('All fields needs to be filled');
     } else {
       addReview({
         variables: {
           filmId: parseInt(targetFilmId),
-          reviewPoints: reviewPoints,
-          reviewOwnerName: reviewOwnerName,
+          ratingPoint: ratingPoint,
+          ownerName: ownerName,
           reviewText: reviewText,
         },
       });
 
       setReview({
-        reviewPoints: 0,
-        reviewOwnerName: '',
+        ratingPoint: 0,
+        ownerName: '',
         reviewText: '',
       });
     }
@@ -77,17 +77,17 @@ const AddReview = ({ targetFilmId }) => {
               type='text'
               required
               placeholder='Type your Name'
-              name='reviewOwnerName'
+              name='ownerName'
               className='bg-gray-100 rounded border leading-normal w-full h-10 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'
               onChange={onChange}
-              value={reviewOwnerName}
+              value={ownerName}
             />
           </div>
           <StarRatingComponent
             className='px-3'
             name='rating'
             starCount={10}
-            value={reviewPoints}
+            value={ratingPoint}
             onStarClick={changeRating}
           />
           <div className='w-full md:w-full px-3 mb-2 mt-2'>

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import GET_FILM_REVIEWS from '../../graphql/queries/GetFilmReviews';
-import ReviewItem from '../reviews/ReviewItem';
-import AddRewiew from '../reviews/AddReview';
+import ReviewItem from './ReviewItem';
+import AddRewiew from './AddReview';
 import reviewContext from '../../reviewContext';
 
 const Reviews = ({ targetFilmId }) => {

@@ -39,7 +39,7 @@ export class FilmResolver {
   }
 
   @Query(() => FilmType)
-  async getSingleFilm(@Arg("id", () => Int) id: number) {
+  async film(@Arg("id", () => Int) id: number) {
     try {
       const res = await Film.findByPk(id);
       return res;
@@ -49,7 +49,7 @@ export class FilmResolver {
   }
 
   @Query(() => [FilmType])
-  async getFilms() {
+  async films() {
     try {
       const res = await Film.findAll();
       return res;

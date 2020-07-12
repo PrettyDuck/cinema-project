@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import GET_FILM_QUERY from '../../graphql/queries/GetFilm.jsx';
+import GET_FILM_QUERY from '../../graphql/queries/GetFilm';
 import Reviews from '../reviews/Reviews';
 
 const Film = ({ match }) => {

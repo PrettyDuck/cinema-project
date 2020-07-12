@@ -7,11 +7,16 @@ import { FilmResolver } from "./resolvers/FilmResolver";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { ReviewResolver } from "./resolvers/ReviewResovler";
 import initRelations from "../db/relations";
+import cors  from "cors";
 
 (async () => {
   const app = express();
   const PORT: number = 5000;
-
+  
+  app.use(cors());
+  app.use("/uploads", express.static("uploads"));
+  app.use("/films/uploads", express.static("uploads"));
+  
   const appoloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [FilmResolver, CategoryResolver, ReviewResolver],

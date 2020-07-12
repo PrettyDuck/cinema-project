@@ -6,11 +6,10 @@ import Footer from './components/layout/Footer';
 import Home from './components/pages/Home';
 import SearchFilms from './components/pages/SearchFilms';
 import Film from './components/pages/Film';
+import ReviewContext from './reviewContext';
+import reviewReducer from './reviewReducer';
 
-import ReviewContext from '../src/reviewContext';
-import reviewReducer from '../src/reviewReducer';
-
-function App() {
+const App: React.FC = () => {
   const initialState = useContext(ReviewContext);
   const [state, dispatch] = useReducer(reviewReducer, initialState);
   return (
@@ -30,6 +29,6 @@ function App() {
       </div>
     </Router>
   );
-}
+};
 
 export default App;

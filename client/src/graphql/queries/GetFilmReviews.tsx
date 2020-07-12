@@ -4,8 +4,8 @@ const GET_FILM_REVIEWS = gql`
   query GetFilmReviews($filmId: Int!) {
     reviews(filmId: $filmId) {
       id
-      reviewOwnerName
-      reviewPoints
+      ownerName
+      ratingPoint
       reviewText
     }
   }

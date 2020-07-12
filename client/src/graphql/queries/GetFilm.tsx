@@ -5,11 +5,7 @@ const GET_FILM_QUERY = gql`
     film(id: $id) {
       id
       name
-      categoryId
-      category {
-        id
-        categoryName
-      }
+      categoriesId
       year
       filmDescription
       averageRating
