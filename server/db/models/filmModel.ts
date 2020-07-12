@@ -1,5 +1,5 @@
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../db/database");
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../database";
 
 class Film extends Model {}
 Film.init(
@@ -13,7 +13,7 @@ Film.init(
     name: {
       type: DataTypes.STRING,
     },
-    categoryId: {
+    categoriesId: {
       type: DataTypes.STRING,
     },
     year: {
@@ -39,4 +39,4 @@ Film.init(
   }
 );
 
-module.exports = Film;
+export default Film;

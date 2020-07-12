@@ -14,10 +14,10 @@ services:
         ports: 
             - '5000:5000'
         depends_on: 
-            - mysqlHOST
-    mysqlHOST:
+            - mysqlHost
+    mysqlHost:
         image: mysql
-        container_name: mysqlHOST
+        container_name: mysqlHost
         environment:
             MYSQL_ROOT_PASSWORD: Redoctopus353
             MYSQL_DATABASE: filmsdb

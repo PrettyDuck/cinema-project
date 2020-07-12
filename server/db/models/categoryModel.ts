@@ -1,5 +1,5 @@
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../db/database");
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../database";
 
 class Category extends Model {}
 Category.init(
@@ -10,15 +10,15 @@ Category.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    categoryName: {
+    name: {
       type: DataTypes.STRING,
     },
   },
   {
     sequelize,
     modelName: "film_category",
-    timestamps: false
+    timestamps: false,
   }
 );
 
-module.exports = Category;
+export default Category;

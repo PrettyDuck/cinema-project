@@ -1,8 +1,8 @@
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../db/database");
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../database";
 
-class Review extends Model {}
-Review.init(
+class Actor extends Model {}
+Actor.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -10,21 +10,21 @@ Review.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    reviewOwnerName: {
+    name: {
       type: DataTypes.STRING,
     },
-    reviewPoints: {
+    age: {
       type: DataTypes.INTEGER,
     },
-    reviewText: {
+    profilePhoto: {
       type: DataTypes.STRING,
     },
   },
   {
     sequelize,
-    modelName: "film_review",
+    modelName: "actor",
     timestamps: false,
   }
 );
 
-module.exports = Review;
+export default Actor;
