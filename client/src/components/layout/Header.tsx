@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header:React.FC = () => {
   return (
     <nav className='flex items-center justify-between bg-green-500 p-5'>
       <div className='text-white'>

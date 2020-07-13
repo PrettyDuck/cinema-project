@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import GET_FILM_QUERY from '../../graphql/queries/GetFilm';
 import Reviews from '../reviews/Reviews';
 
-const Film = ({ match }) => {
+const Film:React.FC = ({ match }:any) => {
   const { data, loading, error } = useQuery(GET_FILM_QUERY, {
     variables: {
       id: parseInt(match.params.id),

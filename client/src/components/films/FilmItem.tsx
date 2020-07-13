@@ -4,7 +4,11 @@ import { useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import GET_FILM_CATEGORIES from '../../graphql/queries/GetFilmCategories';
 
-const FilmItem = ({ film }) => {
+type FilmItemProps = {
+  film: FilmType;
+};
+
+const FilmItem: React.FC<FilmItemProps> = ({ film }) => {
   const { data, loading, error } = useQuery(GET_FILM_CATEGORIES, {
     variables: {
       filmCategoriesId: film.categoriesId,
@@ -26,7 +30,7 @@ const FilmItem = ({ film }) => {
               </div>
             </div>
             <div className='px-6 pb-4'>
-              {data.filmCategories.map((category) => (
+              {data.filmCategories.map((category: CategoryType) => (
                 <span
                   key={category.id}
                   className='inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2'>

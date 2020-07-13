@@ -5,7 +5,7 @@ import GET_FILM_REVIEWS from '../../graphql/queries/GetFilmReviews';
 import { useMutation } from '@apollo/react-hooks';
 import reviewContext from '../../reviewContext';
 
-const AddReview = ({ targetFilmId }) => {
+const AddReview:React.FC<{targetFilmId: string }> = ({ targetFilmId }) => {
   const { state, dispatch } = useContext(reviewContext);
 
   const [addReview] = useMutation(ADD_NEW_FILM_REVIEW, {
@@ -32,21 +32,21 @@ const AddReview = ({ targetFilmId }) => {
 
   const { ratingPoint, ownerName, reviewText } = review;
 
-  const onChange = (e) => {
+  const onChange = (e:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
     setReview({
       ...review,
       [e.target.name]: e.target.value,
     });
   };
 
-  const changeRating = (nextValue, prevValue, name) => {
+  const changeRating = (nextValue:any, prevValue:any, name:any) => {
     setReview({
       ...review,
       ratingPoint: nextValue,
     });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (ownerName === '' || reviewText === '') {
       console.log('All fields needs to be filled');

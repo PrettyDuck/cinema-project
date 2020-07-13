@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SearchFilms = () => {
+const SearchFilms:React.FC = () => {
   return (
     <div className='mb-auto'>
       <span>Search Page</span>

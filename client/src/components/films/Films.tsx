@@ -10,14 +10,12 @@ const Films = () => {
       {loading && <div>Loading...</div>}
       {error && <div>{error.message}</div>}
       {!loading && data.films && (
-        
         <div className='grid gap-2 grid-cols-4 mx-24 my-12'>
-          {data.films.map((film) => (
+          {data.films.map((film: FilmType) => (
             <FilmItem film={film} key={film.id} />
           ))}
         </div>
       )}
-      
     </>
   );
 };

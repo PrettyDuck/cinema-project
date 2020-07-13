@@ -1,7 +1,12 @@
 import React from 'react';
 import StarRatingComponent from 'react-star-rating-component';
 
-const ReviewItem = ({ review }) => {
+
+type ReviewItemProps = {
+  review: ReviewType;
+};
+
+const ReviewItem:React.FC<ReviewItemProps> = ({ review }) => {
   return (
     <div className='max-w-md py-4 px-16 bg-white shadow-lg rounded-lg my-4 flex flex-col items-center'>
       <h2 className='text-gray-800 text-3xl font-semibold text-center'>{review.ownerName}</h2>

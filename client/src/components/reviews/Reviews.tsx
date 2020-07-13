@@ -5,9 +5,8 @@ import ReviewItem from './ReviewItem';
 import AddRewiew from './AddReview';
 import reviewContext from '../../reviewContext';
 
-const Reviews = ({ targetFilmId }) => {
+const Reviews: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
   const { state, dispatch } = useContext(reviewContext);
-
   const { data, loading, error } = useQuery(GET_FILM_REVIEWS, {
     variables: {
       filmId: parseInt(targetFilmId),
@@ -33,7 +32,7 @@ const Reviews = ({ targetFilmId }) => {
                 There is no any user review yet.
               </h4>
             )}
-            {state.reviews.map((review) => (
+            {state.reviews.map((review: ReviewType) => (
               <ReviewItem key={review.id} review={review} />
             ))}
           </div>
