@@ -13,7 +13,7 @@ Actor.init(
     name: {
       type: DataTypes.STRING,
     },
-    age: {
+    birthYear: {
       type: DataTypes.INTEGER,
     },
     profilePhoto: {

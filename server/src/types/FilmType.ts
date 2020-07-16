@@ -1,5 +1,5 @@
 import { ObjectType, Int, Float, Field } from "type-graphql";
-import CategoryType from "../types/CategoryType";
+import ActorType from "./ActorType"
 
 @ObjectType({ description: "Film Type" })
 class FilmType {
@@ -19,5 +19,7 @@ class FilmType {
   averageRating!: number;
   @Field(() => String)
   coverImage!: string;
+  @Field(()=>[ActorType])
+  actors?: [ActorType]
 }
 export default FilmType;

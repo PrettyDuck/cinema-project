@@ -2,6 +2,7 @@ import { Query, Mutation, Arg, Resolver, Int } from "type-graphql";
 import { FilmInput, FilmUpdateInput } from "../input-types/FilmInputs";
 import FilmType from "../types/FilmType";
 import Film from "../../db/models/filmModel";
+import Actor from "../../db/models/actorModel";
 
 @Resolver()
 export class FilmResolver {
@@ -41,7 +42,10 @@ export class FilmResolver {
   @Query(() => FilmType)
   async film(@Arg("id", () => Int) id: number) {
     try {
-      const res = await Film.findByPk(id);
+      const res = await Film.findOne({
+        where: { id: id },
+        include: Actor,
+      });
       return res;
     } catch (err) {
       console.log(err);

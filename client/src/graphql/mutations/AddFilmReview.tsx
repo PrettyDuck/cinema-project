@@ -9,11 +9,7 @@ const ADD_FILM_REVIEW = gql`
   ) {
     addReview(
       filmId: $filmId
-      input: {
-      ownerName: $ownerName
-      ratingPoint: $ratingPoint
-      reviewText: $reviewText
-      }
+      input: { ownerName: $ownerName, ratingPoint: $ratingPoint, reviewText: $reviewText }
     ) {
       id
       ownerName

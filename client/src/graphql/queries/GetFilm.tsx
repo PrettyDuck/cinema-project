@@ -10,6 +10,12 @@ const GET_FILM_QUERY = gql`
       filmDescription
       averageRating
       coverImage
+      actors {
+        id
+        name
+        birthYear
+        profilePhoto
+      }
     }
   }
 `;

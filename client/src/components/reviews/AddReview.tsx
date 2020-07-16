@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import StarRatingComponent from 'react-star-rating-component';
-import ADD_NEW_FILM_REVIEW from '../../graphql/mutations/AddNewFilmReview';
+import ADD_NEW_FILM_REVIEW from '../../graphql/mutations/AddFilmReview';
 import GET_FILM_REVIEWS from '../../graphql/queries/GetFilmReviews';
 import { useMutation } from '@apollo/react-hooks';
 import reviewContext from '../../reviewContext';

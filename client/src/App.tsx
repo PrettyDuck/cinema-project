@@ -8,6 +8,7 @@ import SearchFilms from './components/pages/SearchFilms';
 import Film from './components/pages/Film';
 import ReviewContext from './reviewContext';
 import reviewReducer from './reviewReducer';
+import AddActorForm from './components/actors/AddActorForm';
 
 const App: React.FC = () => {
   const initialState = useContext(ReviewContext);
@@ -22,6 +23,7 @@ const App: React.FC = () => {
               <Route exact path='/' component={Home} />
               <Route exact path='/search' component={SearchFilms} />
               <Route exact path='/films/:id' component={Film} />
+              <Route exact path='/addActor' component={AddActorForm} />
             </Switch>
           </ReviewContext.Provider>
         </div>
