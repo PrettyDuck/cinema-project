@@ -24,15 +24,15 @@ const Film: React.FC = ({ match }: any) => {
           id: parseInt(match.params.id),
         },
       });
-      history.push('/');
+      await history.push('/');
     } catch (error) {
       console.log(error);
     }
   };
   const updateItem = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    history.push('/filmUpdate')
-  }
+    history.push('/filmUpdate');
+  };
   return (
     <>
       {loading && <div>Loading...</div>}
@@ -64,7 +64,9 @@ const Film: React.FC = ({ match }: any) => {
                   onClick={deleteItem}>
                   Delete Film
                 </button>
-                <button className='block uppercase mx-auto shadow bg-green-700 hover:bg-green-600 focus:outline-none text-white text-xs py-3 px-10 rounded' onClick={updateItem}>
+                <button
+                  className='block uppercase mx-auto shadow bg-green-700 hover:bg-green-600 focus:outline-none text-white text-xs py-3 px-10 rounded'
+                  onClick={updateItem}>
                   Update Film
                 </button>
               </div>

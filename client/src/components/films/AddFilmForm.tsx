@@ -76,7 +76,7 @@ const AddFilmForm: React.FC = () => {
     try {
       const categoriesId: any = [];
       selectedCategories.map((category) => {
-        categoriesId.push(category.value);                                  
+        categoriesId.push(category.value);
       });
       const res = await addFilm({
         variables: {
@@ -99,10 +99,10 @@ const AddFilmForm: React.FC = () => {
         });
         console.log(actorRes);
       }
+      await history.push('/');
     } catch (error) {
       console.log(error);
     }
-    history.push('/');
   };
   return (
     <>
