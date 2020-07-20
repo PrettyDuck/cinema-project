@@ -1,4 +1,5 @@
 import { Int, Float, InputType, Field } from "type-graphql";
+import { GraphQLUpload, FileUpload} from "graphql-upload";
 
 @InputType()
 class FilmInput {
@@ -14,8 +15,8 @@ class FilmInput {
   filmDescription!: string;
   @Field(() => Float)
   averageRating!: number;
-  @Field(() => String)
-  coverImage!: string;
+  @Field(() => GraphQLUpload)
+  coverImage!: FileUpload;
 }
 
 @InputType()
@@ -32,8 +33,8 @@ class FilmUpdateInput {
   filmDescription?: string;
   @Field(() => Float)
   averageRating?: number;
-  @Field(() => String)
-  coverImage?: string;
+  @Field(() => GraphQLUpload)
+  coverImage?: FileUpload;
 }
 
 export { FilmInput, FilmUpdateInput };

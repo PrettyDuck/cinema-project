@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useMutation } from '@apollo/react-hooks';
 import ADD_ACTOR from '../../graphql/mutations/AddActor';
+import { useHistory } from 'react-router-dom';
 
 const AddActorForm: React.FC = () => {
   const [birthYear, setDate] = useState(new Date());
@@ -21,21 +22,27 @@ const AddActorForm: React.FC = () => {
     setDate(date);
   };
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const history = useHistory();
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    addActor({
-      variables: {
-        name: name,
-        birthYear: birthYear.getFullYear(),
-        profilePhoto: profilePhoto,
-      },
-    });
+    try {
+      await addActor({
+        variables: {
+          name: name,
+          birthYear: birthYear.getFullYear(),
+          profilePhoto: profilePhoto,
+        },
+      });
+      history.push('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div className='flex flex-col justify-center items-center my-24'>
       <div className='flex flex-col justify-center items-center w-1/2 rounded-lg shadow-2xl'>
-        <div className='text-gray-700 text-lg pt-8'>Add Author</div>
+        <div className='text-gray-700 text-lg pt-8'>Add Actor</div>
         <form className='w-full flex flex-col' onSubmit={onSubmit}>
           <div className='my-2 mx-6'>
             <label htmlFor='name'>Actor Name:</label>
@@ -60,13 +67,13 @@ const AddActorForm: React.FC = () => {
             />
           </div>
           <div className='my-2 mx-6'>
-            <label htmlFor='name'>Add Author Photo:</label>
+            <label htmlFor='name'>Add Actor Photo:</label>
             <br />
             <input type='file' name='profilePhoto' onChange={onChangeProfilePhoto} required />
           </div>
           <input
             type='submit'
-            value='Add Product'
+            value='Add Actor'
             className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-green-300 hover:bg-green-500'
           />
         </form>

@@ -20,4 +20,13 @@ export class CategoryResolver {
       return resultArray;
     } catch (error) {}
   }
+  @Query(() => [CategoryType])
+  async categories() {
+    try {
+      const res = await Category.findAll();
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }

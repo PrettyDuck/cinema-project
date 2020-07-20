@@ -3,13 +3,41 @@ import { FilmInput, FilmUpdateInput } from "../input-types/FilmInputs";
 import FilmType from "../types/FilmType";
 import Film from "../../db/models/filmModel";
 import Actor from "../../db/models/actorModel";
+import storeFS from "../utills/storeFile";
 
 @Resolver()
 export class FilmResolver {
   @Mutation(() => FilmType)
   async addFilm(@Arg("input", () => FilmInput) input: FilmInput) {
     try {
-      const createdFilm = await Film.create(input);
+      const {
+        name,
+        categoriesId,
+        year,
+        filmDirector,
+        filmDescription,
+        averageRating,
+        coverImage,
+      } = input;
+      const { filename, createReadStream } = await coverImage;
+      const stream = createReadStream();
+      const pathObj: any = await storeFS({ stream, filename });
+      let fileLocation = pathObj.path;
+      // Path String Refactoring
+      console.log(fileLocation);
+      const pathExecutorPattern = new RegExp("../(?=uploads/)");
+      fileLocation = fileLocation.split(pathExecutorPattern)[1];
+      fileLocation = fileLocation.replace(/\//g, "\\");
+      console.log(fileLocation);
+      const createdFilm = await Film.create({
+        name,
+        categoriesId,
+        year,
+        filmDirector,
+        filmDescription,
+        averageRating,
+        coverImage: fileLocation,
+      });
       return createdFilm;
     } catch (err) {
       console.log(err);

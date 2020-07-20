@@ -18,6 +18,7 @@ import { graphqlUploadExpress } from "graphql-upload";
   app.use(cors());
   app.use("/uploads", express.static("uploads"));
   app.use("/films/uploads", express.static("uploads"));
+  app.use("/actors/uploads", express.static("uploads"));
 
 
   app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));

@@ -9,15 +9,15 @@ const Header: React.FC = () => {
           Cinema Project
         </Link>
       </div>
-      <div className='flex items-center justify-between w-64'>
+      <div className='flex items-center justify-between w-2/12'>
         <div className='text-lg'>
           <Link to='/addActor' className='text-green-200 hover:text-white'>
             Add Actor
           </Link>
         </div>
         <div className='text-lg'>
-          <Link to='/search' className='text-green-200 hover:text-white'>
-            Search a movie
+          <Link to='/addFilm' className='text-green-200 hover:text-white'>
+            Add Film
           </Link>
         </div>
       </div>

@@ -1,27 +1,10 @@
-import { Query, Mutation, Arg, Resolver, Int, ObjectType } from "type-graphql";
+import { Query, Mutation, Arg, Resolver, Int } from "type-graphql";
 import ActorType from "../types/ActorType";
 import ActorInput from "../input-types/ActorInputs";
 import Actor from "../../db/models/actorModel";
 import Film from "../../db/models/filmModel";
-import fs from "fs";
-import { dirname } from "path";
+import storeFS from '../utills/storeFile'
 
-const storeFS = ({ stream, filename }: any) => {
-  const uploadDir = __dirname + '/../../uploads';
-  const path = `${uploadDir}/${filename}`;
-  return new Promise((resolve, reject) =>
-    stream
-      .on("error", (error: any) => {
-        if (stream.truncated)
-          // delete the truncated file
-          fs.unlinkSync(path);
-        reject(error);
-      })
-      .pipe(fs.createWriteStream(path))
-      .on("error", (error: any) => reject(error))
-      .on("finish", () => resolve({ path }))
-  );
-};
 
 @Resolver()
 export class ActorResolver {
@@ -70,12 +53,21 @@ export class ActorResolver {
   }
 
   @Query(() => ActorType)
-  async author(@Arg("id", () => Int) id: number) {
+  async actor(@Arg("id", () => Int) id: number) {
     try {
       const res = await Actor.findByPk(id);
       return res;
     } catch (err) {
       console.log(err);
+    }
+  }
+  @Query(()=>[ActorType])
+  async actors(){
+    try {
+      const res = await Actor.findAll();
+      return res;
+    } catch (err) {
+      console.log(err)
     }
   }
 }
