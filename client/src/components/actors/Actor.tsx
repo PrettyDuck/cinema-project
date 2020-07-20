@@ -14,7 +14,7 @@ const Actor: React.FC = ({ match }: any) => {
       {error && <div>{error.message}</div>}
       {!loading && data.actor && (
         <div className='flex justify-center m-8'>
-          <div className='flex flex-col items-center rounded border-t border-b border-l border-gray-400 p-4'>
+          <div className='flex flex-col items-center rounded border-t border-b border-l border-gray-400 p-4 flex-grow'>
             <span className='text-gray-900 font-bold text-xl mb-4'>{data.actor.name}</span>
             <span className='mb-2'>{data.actor.birthYear}</span>
           </div>
