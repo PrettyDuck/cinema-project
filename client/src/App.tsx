@@ -8,11 +8,11 @@ import Film from './components/films/Film';
 import ReviewContext from './reviewContext';
 import reviewReducer from './reviewReducer';
 import AddActorForm from './components/actors/AddActorForm';
-import AddFilmForm from './components/films/AddFilmForm';
+import FilmForm from './components/films/FilmForm';
 import Actor from './components/actors/Actor';
-import UpdateFilmForm from './components/films/UpdateFilmForm';
+import AdminHome from './components/pages/AdminHome'
 
-const App: React.FC = () => {
+const App: React.FC = ({ match }: any) => {
   const initialState = useContext(ReviewContext);
   const [state, dispatch] = useReducer(reviewReducer, initialState);
   return (
@@ -25,9 +25,18 @@ const App: React.FC = () => {
               <Route exact path='/' component={Home} />
               <Route exact path='/films/:id' component={Film} />
               <Route exact path='/addActor' component={AddActorForm} />
-              <Route exact path='/addFilm' component={AddFilmForm} />
+              <Route
+                exact
+                path='/addFilm'
+                render={(props) => <FilmForm {...props} isUpdate={false} />}
+              />
               <Route exact path='/actors/:id' component={Actor} />
-              <Route exact path='/filmUpdate' component={UpdateFilmForm} />
+              <Route
+                exact
+                path='/filmUpdate'
+                render={(props) => <FilmForm {...props} isUpdate={true} />}
+              />
+              <Route exact path='/admin' component={AdminHome}/>
             </Switch>
           </ReviewContext.Provider>
         </div>

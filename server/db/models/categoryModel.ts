@@ -16,7 +16,7 @@ Category.init(
   },
   {
     sequelize,
-    modelName: "film_category",
+    modelName: "category",
     timestamps: false,
   }
 );

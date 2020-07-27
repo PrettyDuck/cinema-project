@@ -1,15 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import MultiSelect from 'react-multi-select-component';
 import GET_CATEGORIES_QUERY from '../../graphql/queries/GetCategories';
 import GET_ACTORS_QUERY from '../../graphql/queries/GetActors';
+import GET_FILM_ADMIN_QUERY from '../../graphql/queries/GetFilmAdmin';
+import ADD_FILM from '../../graphql/mutations/AddFilm';
+import ADD_FILM_ACTOR from '../../graphql/mutations/AddFilmActor';
+import MultiSelect from 'react-multi-select-component';
+import { useHistory } from 'react-router-dom';
+import ADD_FILM_CATEGORY from '../../graphql/mutations/AddFilmCategory';
 
 interface SelectOption {
   label: string;
   value: number;
 }
 
-const UpdateFilmForm: React.FC = () => {
+const FilmForm: React.FC = (props) => {
+  const { data: filmData, loading: filmLoading, error: filmError } = useQuery(
+    GET_FILM_ADMIN_QUERY,
+    {
+      variables: {
+        id: props.location.state.filmId,
+      },
+      skip: props.isUpdate === false,
+    },
+  );
+
   const { data: categoriesData, loading: categoriesLoading, error: categoriesError } = useQuery(
     GET_CATEGORIES_QUERY,
   );
@@ -63,10 +78,68 @@ const UpdateFilmForm: React.FC = () => {
     setCoverImage(e.target.files![0]);
   };
 
+  useEffect(() => {
+    if (!filmError && !filmLoading && props.isUpdate) {
+      setName(filmData.film.name);
+      const tempCategories = filmData.film.categories.map((category) => {
+        return { label: category.name, value: category.id };
+      });
+      setSelectedCategories(tempCategories);
+      setYear(filmData.film.year);
+      setFilmDirector(filmData.film.filmDirector);
+      setFilmDescription(filmData.film.filmDescription);
+      setAverageRating(filmData.film.averageRating);
+      const tempActors = filmData.film.actors.map((actor) => {
+        return { label: actor.name, value: actor.id };
+      });
+      setSelectedAuthors(tempActors);
+    }
+  }, [filmData, filmError, filmLoading]);
+
+  const history = useHistory();
+
+  const [addFilm] = useMutation(ADD_FILM);
+  const [addFilmActor] = useMutation(ADD_FILM_ACTOR);
+  const [addFilmCategory] = useMutation(ADD_FILM_CATEGORY);
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      console.log('Submit');
+      if (isUpdate) {
+        
+      } else {
+        const res = await addFilm({
+          variables: {
+            name: name,
+            year: parseInt(year),
+            filmDirector: filmDirector,
+            filmDescription: filmDescription,
+            averageRating: parseFloat(averageRating),
+            coverImage: coverImage,
+          },
+        });
+        console.log(res);
+        for await (let category of selectedCategories) {
+          const categoriesRes = await addFilmCategory({
+            variables: {
+              categoryId: category.value,
+              filmId: res.data.addFilm.id,
+            },
+          });
+          console.log(categoriesRes);
+        }
+
+        for await (let actor of selectedAuthors) {
+          const actorRes = await addFilmActor({
+            variables: {
+              actorId: actor.value,
+              filmId: res.data.addFilm.id,
+            },
+          });
+          console.log(actorRes);
+        }
+      }
+      await history.push('/admin');
     } catch (error) {
       console.log(error);
     }
@@ -78,7 +151,11 @@ const UpdateFilmForm: React.FC = () => {
       {!categoriesLoading && categoriesData.categories && (
         <div className='flex flex-col justify-center items-center my-12'>
           <div className='flex flex-col justify-center items-center w-1/2 rounded-lg shadow-2xl'>
-            <div className='text-gray-700 text-lg pt-8'>Update Film</div>
+            {props.isUpdate ? (
+              <div className='text-gray-700 text-lg pt-8'>Update Film</div>
+            ) : (
+              <div className='text-gray-700 text-lg pt-8'>Add New Film</div>
+            )}
             <form className='w-full flex flex-col' onSubmit={onSubmit}>
               <div className='my-2 mx-6'>
                 <label htmlFor='name'>Film Title:</label>
@@ -156,7 +233,7 @@ const UpdateFilmForm: React.FC = () => {
                 />
               </div>
               <div className='my-2 mx-6'>
-                <label>Choose Stars:</label>
+                {props.isUpdate ? <label>Update film Stars:</label> : <label>Choose Stars:</label>}
                 <br />
                 <MultiSelect
                   options={actorsOptions}
@@ -167,15 +244,27 @@ const UpdateFilmForm: React.FC = () => {
                 />
               </div>
               <div className='my-2 mx-6'>
-                <label htmlFor='coverImage'>Film Cover Image:</label>
+                {props.isUpdate ? (
+                  <label htmlFor='coverImage'>Change Film Cover Image:</label>
+                ) : (
+                  <label htmlFor='coverImage'>Add Film Cover Image:</label>
+                )}
                 <br />
                 <input type='file' name='coverImage' onChange={onChangeCoverImage} required />
               </div>
-              <input
-                type='submit'
-                value='Update Film'
-                className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-green-300 hover:bg-green-500'
-              />
+              {props.isUpdate ? (
+                <input
+                  type='submit'
+                  value='Update Film'
+                  className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-green-300 hover:bg-green-500'
+                />
+              ) : (
+                <input
+                  type='submit'
+                  value='Add Film'
+                  className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-green-300 hover:bg-green-500'
+                />
+              )}
             </form>
           </div>
         </div>
@@ -183,4 +272,4 @@ const UpdateFilmForm: React.FC = () => {
     </>
   );
 };
-export default UpdateFilmForm;
+export default FilmForm;

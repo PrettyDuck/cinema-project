@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation,useQuery } from '@apollo/react-hooks';
 import ADD_ACTOR from '../../graphql/mutations/AddActor';
 import { useHistory } from 'react-router-dom';
+import GET_FILMS_ADMIN_QUERY from '../../graphql/queries/GetFilmsAdmin';
 
 const AddActorForm: React.FC = () => {
+  const { data, loading, error, refetch } = useQuery(GET_FILMS_ADMIN_QUERY);
+
   const [birthYear, setDate] = useState(new Date());
   const [name, setName] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(new File([], 'name'));
@@ -33,6 +36,7 @@ const AddActorForm: React.FC = () => {
           profilePhoto: profilePhoto,
         },
       });
+      refetch();
       history.push('/');
     } catch (error) {
       console.log(error);

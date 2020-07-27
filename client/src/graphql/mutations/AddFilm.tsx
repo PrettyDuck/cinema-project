@@ -3,7 +3,6 @@ import gql from 'graphql-tag';
 const ADD_FILM = gql`
   mutation AddFilm(
     $name: String!
-    $categoriesId: String!
     $year: Int!
     $filmDirector: String!
     $filmDescription: String!
@@ -13,7 +12,6 @@ const ADD_FILM = gql`
     addFilm(
       input: {
         name: $name
-        categoriesId: $categoriesId
         year: $year
         filmDirector: $filmDirector
         filmDescription: $filmDescription
@@ -23,7 +21,6 @@ const ADD_FILM = gql`
     ) {
       id
       name
-      categoriesId
       year
       filmDirector
       filmDescription

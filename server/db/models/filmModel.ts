@@ -13,9 +13,6 @@ Film.init(
     name: {
       type: DataTypes.STRING,
     },
-    categoriesId: {
-      type: DataTypes.STRING,
-    },
     year: {
       type: DataTypes.INTEGER,
     },

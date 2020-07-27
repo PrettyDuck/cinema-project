@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import GET_FILMS_QUERY from '../../graphql/queries/GetFilms';
 import FilmItem from './FilmItem';
 
-const Films = () => {
+const Films:React.FC = () => {
   const { data, loading, error } = useQuery(GET_FILMS_QUERY);
   return (
     <>

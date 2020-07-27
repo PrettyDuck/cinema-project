@@ -5,8 +5,6 @@ import { GraphQLUpload, FileUpload} from "graphql-upload";
 class FilmInput {
   @Field(() => String)
   name!: string;
-  @Field(() => String)
-  categoriesId!: string;
   @Field(() => Int)
   year!: number;
   @Field(() => String)
@@ -23,8 +21,6 @@ class FilmInput {
 class FilmUpdateInput {
   @Field(() => String)
   name?: string;
-  @Field(() => String)
-  categoriesId?: string;
   @Field(() => Int)
   year?: number;
   @Field(() => String)

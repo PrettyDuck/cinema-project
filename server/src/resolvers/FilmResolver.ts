@@ -4,6 +4,7 @@ import FilmType from "../types/FilmType";
 import Film from "../../db/models/filmModel";
 import Actor from "../../db/models/actorModel";
 import storeFS from "../utills/storeFile";
+import Category from "../../db/models/categoryModel";
 
 @Resolver()
 export class FilmResolver {
@@ -12,7 +13,6 @@ export class FilmResolver {
     try {
       const {
         name,
-        categoriesId,
         year,
         filmDirector,
         filmDescription,
@@ -31,7 +31,6 @@ export class FilmResolver {
       console.log(fileLocation);
       const createdFilm = await Film.create({
         name,
-        categoriesId,
         year,
         filmDirector,
         filmDescription,
@@ -72,7 +71,7 @@ export class FilmResolver {
     try {
       const res = await Film.findOne({
         where: { id: id },
-        include: Actor,
+        include: [Actor,Category],
       });
       return res;
     } catch (err) {
@@ -83,7 +82,9 @@ export class FilmResolver {
   @Query(() => [FilmType])
   async films() {
     try {
-      const res = await Film.findAll();
+      const res = await Film.findAll({
+        include: Category,
+      });
       return res;
     } catch (err) {
       console.log(err);

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const GET_FILMS_QUERY = gql`
+const GET_FILMS_ADMIN_QUERY = gql`
   query GetFilms {
     films {
       id
@@ -9,11 +9,7 @@ const GET_FILMS_QUERY = gql`
       filmDescription
       averageRating
       coverImage
-      categories {
-        id
-        name
-      }
     }
   }
 `;
-export default GET_FILMS_QUERY;
+export default GET_FILMS_ADMIN_QUERY;

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const GET_FILM_QUERY = gql`
+const GET_FILM_ADMIN_QUERY = gql`
   query GetFilm($id: Int!) {
     film(id: $id) {
       id
@@ -16,7 +16,11 @@ const GET_FILM_QUERY = gql`
         birthYear
         profilePhoto
       }
+      categories {
+        id
+        name
+      }
     }
   }
 `;
-export default GET_FILM_QUERY;
+export default GET_FILM_ADMIN_QUERY;

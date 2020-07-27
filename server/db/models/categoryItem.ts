@@ -1,8 +1,8 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../database";
 
-class ActorItem extends Model {}
-ActorItem.init(
+class CategoryItem extends Model {}
+CategoryItem.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -13,9 +13,9 @@ ActorItem.init(
   },
   {
     sequelize,
-    modelName: "film_actor_item",
+    modelName: "film_category_item",
     timestamps: false,
   }
 );
 
-export default ActorItem;
+export default CategoryItem;
