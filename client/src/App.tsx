@@ -1,18 +1,18 @@
 import React, { useContext, useReducer } from 'react';
-import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import Home from './components/pages/Home';
+import AdminHome from './components/pages/AdminHome';
 import Film from './components/films/Film';
-import ReviewContext from './reviewContext';
-import reviewReducer from './reviewReducer';
-import AddActorForm from './components/actors/AddActorForm';
 import FilmForm from './components/films/FilmForm';
 import Actor from './components/actors/Actor';
-import AdminHome from './components/pages/AdminHome'
+import AddActorForm from './components/actors/AddActorForm';
+import ReviewContext from './reviewContext';
+import reviewReducer from './reviewReducer';
+import './App.css';
 
-const App: React.FC = ({ match }: any) => {
+const App: React.FC = () => {
   const initialState = useContext(ReviewContext);
   const [state, dispatch] = useReducer(reviewReducer, initialState);
   return (
@@ -36,7 +36,7 @@ const App: React.FC = ({ match }: any) => {
                 path='/filmUpdate'
                 render={(props) => <FilmForm {...props} isUpdate={true} />}
               />
-              <Route exact path='/admin' component={AdminHome}/>
+              <Route exact path='/admin' component={AdminHome} />
             </Switch>
           </ReviewContext.Provider>
         </div>

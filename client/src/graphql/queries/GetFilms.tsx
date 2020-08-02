@@ -1,18 +1,21 @@
 import gql from 'graphql-tag';
 
 const GET_FILMS_QUERY = gql`
-  query GetFilms {
-    films {
+  query GetFilms($limit: Int!, $cursor: String) {
+    films(limit: $limit, cursor: $cursor) {
+      filmsData
+      {
       id
       name
-      year
-      filmDescription
       averageRating
       coverImage
       categories {
         id
         name
       }
+      createdAt
+    }
+    hasMore
     }
   }
 `;

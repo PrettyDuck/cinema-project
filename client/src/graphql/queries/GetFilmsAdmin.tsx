@@ -1,14 +1,11 @@
 import gql from 'graphql-tag';
 
 const GET_FILMS_ADMIN_QUERY = gql`
-  query GetFilms {
-    films {
+  query GetFilmsAdmin($page: Int) {
+    adminFilms(page: $page) {
       id
       name
-      year
-      filmDescription
-      averageRating
-      coverImage
+      createdAt
     }
   }
 `;

@@ -8,7 +8,7 @@ import storeFS from '../utills/storeFile'
 
 @Resolver()
 export class ActorResolver {
-  @Mutation(() => ActorType)
+  @Mutation(() => String)
   async addActor(@Arg("input", () => ActorInput) input: ActorInput) {
     try {
       const { name, birthYear, profilePhoto } = input;
@@ -22,12 +22,12 @@ export class ActorResolver {
       fileLocation = fileLocation.split(pathExecutorPattern)[1]
       fileLocation = fileLocation.replace(/\//g, "\\")
       console.log(fileLocation)
-      const createdActor = await Actor.create({
+      await Actor.create({
         name,
         birthYear,
         profilePhoto:fileLocation,
       });
-      return createdActor;
+      return 'New Actor Added';
     } catch (err) {
       console.log(err);
     }

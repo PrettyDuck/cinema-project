@@ -18,6 +18,8 @@ class FilmType {
   averageRating!: number;
   @Field(() => String)
   coverImage!: string;
+  @Field(() => Date)
+  createdAt?: Date;
   @Field(() => [ActorType])
   actors?: [ActorType];
   @Field(() => [CategoryType])

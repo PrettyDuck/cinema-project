@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-const ReviewContext:any = createContext({
+const ReviewContext: any = createContext({
   reviews: [],
 });
 

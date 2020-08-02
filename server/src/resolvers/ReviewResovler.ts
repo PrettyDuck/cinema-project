@@ -1,7 +1,6 @@
 import { Query, Mutation, Arg, Resolver, Int } from "type-graphql";
 import { ReviewInput } from "../input-types/ReviewInputs";
 import ReviewType from "../types/ReviewType";
-import Review from "../../db/models/reviewModel";
 import Film from "../../db/models/filmModel";
 
 @Resolver()

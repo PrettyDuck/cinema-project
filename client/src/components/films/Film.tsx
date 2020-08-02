@@ -1,8 +1,8 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import GET_FILM_QUERY from '../../graphql/queries/GetFilm';
-import Reviews from '../reviews/Reviews';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@apollo/react-hooks';
+import Reviews from '../reviews/Reviews';
+import GET_FILM_QUERY from '../../graphql/queries/GetFilm';
 
 const Film: React.FC = ({ match }: any) => {
   const { data, loading, error } = useQuery(GET_FILM_QUERY, {
@@ -25,7 +25,7 @@ const Film: React.FC = ({ match }: any) => {
               {data.film.actors.length === 0 ? null : (
                 <div className='mb-2 flex flex-col items-center justify-center'>
                   <span>Stars:</span>
-                  <ul>
+                  <ul className="flex flex-col items-center justify-center">
                     {data.film.actors.map((actor: ActorType) => (
                       <li key={actor.id}>
                         <Link to={`/actors/${actor.id}`}>{actor.name}</Link>

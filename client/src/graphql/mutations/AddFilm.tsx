@@ -20,12 +20,6 @@ const ADD_FILM = gql`
       }
     ) {
       id
-      name
-      year
-      filmDirector
-      filmDescription
-      averageRating
-      coverImage
     }
   }
 `;

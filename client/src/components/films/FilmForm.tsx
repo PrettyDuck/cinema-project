@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useHistory } from 'react-router-dom';
 import GET_CATEGORIES_QUERY from '../../graphql/queries/GetCategories';
 import GET_ACTORS_QUERY from '../../graphql/queries/GetActors';
 import GET_FILM_ADMIN_QUERY from '../../graphql/queries/GetFilmAdmin';
 import ADD_FILM from '../../graphql/mutations/AddFilm';
 import ADD_FILM_ACTOR from '../../graphql/mutations/AddFilmActor';
-import MultiSelect from 'react-multi-select-component';
-import { useHistory } from 'react-router-dom';
 import ADD_FILM_CATEGORY from '../../graphql/mutations/AddFilmCategory';
+import UPDATE_FILM from '../../graphql/mutations/UpdateFilm';
+import GET_FILMS_ADMIN_QUERY from '../../graphql/queries/GetFilmsAdmin';
+import MultiSelect from 'react-multi-select-component';
 
 interface SelectOption {
   label: string;
   value: number;
 }
 
-const FilmForm: React.FC = (props) => {
+const FilmForm: React.FC<any> = (props) => {
   const { data: filmData, loading: filmLoading, error: filmError } = useQuery(
     GET_FILM_ADMIN_QUERY,
     {
@@ -32,6 +34,8 @@ const FilmForm: React.FC = (props) => {
     GET_ACTORS_QUERY,
   );
 
+  const { refetch } = useQuery(GET_FILMS_ADMIN_QUERY);
+
   const categoriesOptions: any = [];
   const actorsOptions: any = [];
   useEffect(() => {
@@ -39,18 +43,18 @@ const FilmForm: React.FC = (props) => {
       categoriesData.categories.map((category: CategoryType) =>
         categoriesOptions.push({ value: category.id, label: category.name }),
       );
-      console.log(categoriesOptions);
+      // console.log(categoriesOptions);
     }
-  }, [categoriesData, categoriesError, categoriesLoading, categoriesOptions]);
+  }, [categoriesOptions]);
 
   useEffect(() => {
     if (!actorsError && !actorsLoading) {
       actorsData.actors.map((actor: ActorType) =>
         actorsOptions.push({ value: actor.id, label: actor.name }),
       );
-      console.log(actorsOptions);
+      // console.log(actorsOptions);
     }
-  }, [actorsData, actorsError, actorsLoading, actorsOptions]);
+  }, [actorsOptions]);
 
   const [selectedCategories, setSelectedCategories] = useState<SelectOption[]>([]);
   const [selectedAuthors, setSelectedAuthors] = useState<SelectOption[]>([]);
@@ -78,23 +82,30 @@ const FilmForm: React.FC = (props) => {
     setCoverImage(e.target.files![0]);
   };
 
+  let unmounted = false;
   useEffect(() => {
     if (!filmError && !filmLoading && props.isUpdate) {
-      setName(filmData.film.name);
-      const tempCategories = filmData.film.categories.map((category) => {
-        return { label: category.name, value: category.id };
-      });
-      setSelectedCategories(tempCategories);
-      setYear(filmData.film.year);
-      setFilmDirector(filmData.film.filmDirector);
-      setFilmDescription(filmData.film.filmDescription);
-      setAverageRating(filmData.film.averageRating);
-      const tempActors = filmData.film.actors.map((actor) => {
-        return { label: actor.name, value: actor.id };
-      });
-      setSelectedAuthors(tempActors);
+      if (!unmounted) {
+        setName(filmData.film.name);
+        const tempCategories = filmData.film.categories.map((category: CategoryType) => {
+          return { label: category.name, value: category.id };
+        });
+        setSelectedCategories(tempCategories);
+        setYear(filmData.film.year);
+        setFilmDirector(filmData.film.filmDirector);
+        setFilmDescription(filmData.film.filmDescription);
+        setAverageRating(filmData.film.averageRating);
+        const tempActors = filmData.film.actors.map((actor: ActorType) => {
+          return { label: actor.name, value: actor.id };
+        });
+        setSelectedAuthors(tempActors);
+      }
     }
-  }, [filmData, filmError, filmLoading]);
+    return () => {
+      unmounted = true;
+      console.log('HERE')
+    };
+  }, [filmLoading]);
 
   const history = useHistory();
 
@@ -102,11 +113,35 @@ const FilmForm: React.FC = (props) => {
   const [addFilmActor] = useMutation(ADD_FILM_ACTOR);
   const [addFilmCategory] = useMutation(ADD_FILM_CATEGORY);
 
+  const [updateFilm] = useMutation(UPDATE_FILM);
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      if (isUpdate) {
-        
+      if (props.isUpdate) {
+        const updatedFilm: any = {
+          id: filmData.film.id,
+        };
+        if (name !== filmData.film.name) {
+          updatedFilm.name = name;
+        }
+        if (year !== filmData.film.year) {
+          updatedFilm.year = year;
+        }
+        if (filmDirector !== filmData.film.filmDirector) {
+          updatedFilm.filmDirector = filmDirector;
+        }
+        if (averageRating !== filmData.film.averageRating) {
+          updatedFilm.averageRating = averageRating;
+        }
+        if (coverImage.name !== 'name') {
+          updatedFilm.coverImage = coverImage;
+        }
+        console.log(updatedFilm);
+        const res = await updateFilm({
+          variables: updatedFilm,
+        });
+        console.log(res);
       } else {
         const res = await addFilm({
           variables: {
@@ -128,7 +163,6 @@ const FilmForm: React.FC = (props) => {
           });
           console.log(categoriesRes);
         }
-
         for await (let actor of selectedAuthors) {
           const actorRes = await addFilmActor({
             variables: {
@@ -139,7 +173,8 @@ const FilmForm: React.FC = (props) => {
           console.log(actorRes);
         }
       }
-      await history.push('/admin');
+      await refetch();
+      return history.push('/admin');
     } catch (error) {
       console.log(error);
     }
@@ -245,24 +280,30 @@ const FilmForm: React.FC = (props) => {
               </div>
               <div className='my-2 mx-6'>
                 {props.isUpdate ? (
-                  <label htmlFor='coverImage'>Change Film Cover Image:</label>
+                  <>
+                    <label htmlFor='coverImage'>Change Film Cover Image:</label>
+                    <br />
+                    <input type='file' name='coverImage' onChange={onChangeCoverImage} />
+                  </>
                 ) : (
-                  <label htmlFor='coverImage'>Add Film Cover Image:</label>
+                  <>
+                    <label htmlFor='coverImage'>Add Film Cover Image:</label>
+                    <br />
+                    <input type='file' name='coverImage' onChange={onChangeCoverImage} required />
+                  </>
                 )}
-                <br />
-                <input type='file' name='coverImage' onChange={onChangeCoverImage} required />
               </div>
               {props.isUpdate ? (
                 <input
                   type='submit'
                   value='Update Film'
-                  className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-green-300 hover:bg-green-500'
+                  className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-green-300 hover:bg-green-500 outline-none'
                 />
               ) : (
                 <input
                   type='submit'
                   value='Add Film'
-                  className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-green-300 hover:bg-green-500'
+                  className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-green-300 hover:bg-green-500 outline-none'
                 />
               )}
             </form>

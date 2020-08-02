@@ -31,8 +31,8 @@ Film.init(
   },
   {
     sequelize,
+    indexes: [{ unique: false, fields: ["createdAt"] }],
     modelName: "film",
-    timestamps: false,
   }
 );
 

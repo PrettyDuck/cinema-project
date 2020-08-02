@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import GET_FILM_REVIEWS from '../../graphql/queries/GetFilmReviews';
 import ReviewItem from './ReviewItem';
 import AddRewiew from './AddReview';
 import reviewContext from '../../reviewContext';
+import GET_FILM_REVIEWS from '../../graphql/queries/GetFilmReviews';
 
 const Reviews: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
   const { state, dispatch } = useContext(reviewContext);

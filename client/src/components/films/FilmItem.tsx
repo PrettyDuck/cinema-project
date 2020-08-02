@@ -1,14 +1,8 @@
 import React from 'react';
-import starLogo from '../../res/star.svg';
-import { useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
-import GET_FILM_CATEGORIES from '../../graphql/queries/GetFilmCategories';
+import starLogo from '../../res/star.svg';
 
-type FilmItemProps = {
-  film: FilmType;
-};
-
-const FilmItem: React.FC<FilmItemProps> = ({ film }) => {
+const FilmItem: React.FC<{ film: FilmItemType }> = ({ film }) => {
   return (
     <>
       <Link to={`films/${film.id}`}>
