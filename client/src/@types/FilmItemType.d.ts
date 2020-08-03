@@ -4,4 +4,5 @@ declare type FilmItemType = {
   averageRating: number;
   coverImage: string;
   categories: CategoryType[];
+  createdAt: string;
 };

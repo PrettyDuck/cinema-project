@@ -6,6 +6,6 @@ class GetFilmsResponseType {
   @Field(() => [FilmType])
   filmsData!: [FilmType];
   @Field(() => Boolean)
-  hasMore!: boolean;
+  hasMore?: boolean;
 }
 export default GetFilmsResponseType;

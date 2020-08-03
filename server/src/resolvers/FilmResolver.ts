@@ -81,29 +81,44 @@ export class FilmResolver {
 
   @Query(() => GetFilmsResponseType)
   async films(
-    @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => String, { nullable: true }) cursor: string
+    @Arg("limit", () => Int, { nullable: true }) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string,
+    @Arg("filter", () => String, { nullable: true }) filter: string
   ) {
     try {
       const options: any = {
         include: Category,
-        limit: limit,
         order: [["createdAt", "DESC"]],
       };
-      let hasMore = true;
-      if (cursor) {
+      if (filter) {
         options.where = {
-          createdAt: {
-            [Op.lt]: cursor,
+          name: {
+            [Op.substring]: filter,
           },
         };
+        const res = await Film.findAll(options);
+        return { filmsData: res };
+      } else {
+        if (cursor) {
+          options.where = {
+            createdAt: {
+              [Op.lt]: cursor,
+            },
+          };
+        }
+        if (limit) {
+          options.limit = limit;
+        }
+        const res = await Film.findAll(options);
+        if (limit) {
+          let hasMore = true;
+          if (res.length < limit) {
+            hasMore = false;
+          }
+          return { filmsData: res, hasMore: hasMore };
+        }
+        return { filmsData: res };
       }
-      const res = await Film.findAll(options);
-      console.log(res.length);
-      if (res.length < limit) {
-        hasMore = false;
-      }
-      return { filmsData: res, hasMore: hasMore };
     } catch (err) {
       console.log(err);
     }
@@ -123,7 +138,6 @@ export class FilmResolver {
         return res.splice(startIndex, endIndex);
       }
       return res;
-      
     } catch (err) {
       console.log(err);
     }
