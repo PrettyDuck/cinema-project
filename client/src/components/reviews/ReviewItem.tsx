@@ -3,10 +3,12 @@ import StarRatingComponent from 'react-star-rating-component';
 
 const ReviewItem: React.FC<{ review: ReviewType }> = ({ review }) => {
   return (
-    <div className='max-w-md py-4 px-16 bg-white shadow-lg rounded-lg my-4 flex flex-col items-center'>
-      <h2 className='text-gray-800 text-3xl font-semibold text-center'>{review.ownerName}</h2>
+    <div className='w-1/2 bg-teal-600 p-4 mx-auto my-16 shadow-2xl rounded-lg flex flex-col items-center justify-center'>
+      <h2 className=' text-gray-900 text-3xl font-semibold text-center truncate w-11/12'>
+        {review.ownerName}
+      </h2>
       <StarRatingComponent name='rating' starCount={10} value={review.ratingPoint} />
-      <p className='mt-2 text-gray-600 px-16'>{review.reviewText}</p>
+      <span className='mt-2 text-white text-center px-16 truncate w-full'>{review.reviewText}</span>
     </div>
   );
 };

@@ -70,11 +70,11 @@ const AddReview: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
     }
   };
   return (
-    <div className='flex items-center justify-center shadow-lg mb-4 max-w-lg'>
-      <form className='w-full max-w-xl bg-white rounded-lg px-4 pt-2' onSubmit={onSubmit}>
-        <div className='flex flex-wrap -mx-3 mb-6'>
-          <h2 className='px-4 pt-3 pb-2 text-gray-800 text-lg'>Post your own review</h2>
-          <div className='w-full md:w-full px-3 mb-2 mt-2'>
+    <>
+      <form className='max-w-xl rounded-lg mt-16 mb-8 px-4 shadow-lg mx-auto' onSubmit={onSubmit}>
+        <div className='flex flex-wrap'>
+          <h2 className='px-4 py-2 text-gray-800 text-lg'>Post your own review</h2>
+          <div className='w-full px-3 my-2'>
             <input
               type='text'
               required
@@ -92,7 +92,7 @@ const AddReview: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
             value={ratingPoint}
             onStarClick={changeRating}
           />
-          <div className='w-full md:w-full px-3 mb-2 mt-2'>
+          <div className='w-full px-3 my-2'>
             <textarea
               className='bg-gray-100 rounded border leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'
               name='reviewText'
@@ -100,18 +100,16 @@ const AddReview: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
               onChange={onChange}
               value={reviewText}></textarea>
           </div>
-          <div className='w-full  flex items-start px-3'>
-            <div className='-mr-1'>
-              <input
-                type='submit'
-                className='bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100'
-                value='Post Review'
-              />
-            </div>
+          <div className='w-full flex items-start p-3'>
+            <input
+              type='submit'
+              className='bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide hover:bg-gray-100 focus:outline-none'
+              value='Post Review'
+            />
           </div>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 export default AddReview;

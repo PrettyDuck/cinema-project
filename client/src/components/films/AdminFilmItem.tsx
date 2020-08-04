@@ -41,7 +41,7 @@ const AdminFilmItem: React.FC<{ film: AdminFilmItemType }> = ({ film }) => {
           Delete Film
         </button>
         <button
-          className='block uppercase mx-2 shadow bg-green-700 hover:bg-green-600 focus:outline-none text-white text-xs py-3 px-10 rounded'
+          className='block uppercase mx-2 shadow bg-teal-700 hover:bg-teal-600 focus:outline-none text-white text-xs py-3 px-10 rounded'
           onClick={updateItem}>
           Update Film
         </button>

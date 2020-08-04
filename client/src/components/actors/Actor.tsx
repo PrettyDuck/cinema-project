@@ -17,6 +17,9 @@ const Actor: React.FC = ({ match }: any) => {
           <div className='flex flex-col items-center rounded border-t border-b border-l border-gray-400 p-4 flex-grow'>
             <span className='text-gray-900 font-bold text-xl mb-4'>{data.actor.name}</span>
             <span className='mb-2'>{data.actor.birthYear}</span>
+            <span>
+              {data.actor.actorBio}
+            </span>
           </div>
           <img src={data.actor.profilePhoto} alt='film-cover-img' className='h-128 w-128 rounded' />
         </div>

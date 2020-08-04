@@ -8,6 +8,8 @@ class ActorType {
   name!: string
   @Field(()=>Int)
   birthYear!: number
+  @Field(()=>String)
+  actorBio!: string
   @Field(()=> String)
   profilePhoto!: string
 }

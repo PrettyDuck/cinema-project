@@ -16,8 +16,8 @@ const Film: React.FC = ({ match }: any) => {
       {loading && <div>Loading...</div>}
       {error && <div>{error.message}</div>}
       {!loading && data.film && (
-        <div className='flex flex-col'>
-          <div className='flex justify-center m-8'>
+        <>
+          <div className='flex m-8'>
             <div className='flex flex-col items-center rounded border-t border-b border-l border-gray-400 p-4 flex-grow'>
               <span className='text-gray-900 font-bold text-xl mb-4'>{data.film.name}</span>
               <span className='mb-2'>{data.film.year}</span>
@@ -39,7 +39,7 @@ const Film: React.FC = ({ match }: any) => {
             <img src={data.film.coverImage} alt='film-cover-img' className='h-128 w-128 rounded' />
           </div>
           <Reviews targetFilmId={match.params.id} />
-        </div>
+        </>
       )}
     </>
   );

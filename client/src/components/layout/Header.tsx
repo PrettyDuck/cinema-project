@@ -9,7 +9,7 @@ const Header: React.FC = () => {
     history.push('/addFilm', { filmId: 0 });
   };
   return (
-    <nav className='flex items-center justify-between bg-green-500 p-5'>
+    <nav className='flex items-center justify-between bg-teal-700 p-5'>
       <div className='text-white'>
         <Link to='/' className='font-semibold text-xl tracking-tight'>
           Cinema Project
@@ -17,13 +17,13 @@ const Header: React.FC = () => {
       </div>
       <div className='flex items-center justify-between w-2/12'>
         <div className='text-lg'>
-          <Link to='/addActor' className='text-green-200 hover:text-white'>
+          <Link to='/addActor' className=' text-white hover:text-teal-300'>
             Add Actor
           </Link>
         </div>
         <div className='text-lg'>
           <button
-            className='focus:outline-none text-green-200 hover:text-white'
+            className='focus:outline-none  text-white hover:text-teal-300'
             onClick={clickHandler}>
             Add Film
           </button>

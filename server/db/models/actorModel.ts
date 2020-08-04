@@ -16,6 +16,9 @@ Actor.init(
     birthYear: {
       type: DataTypes.INTEGER,
     },
+    actorBio: {
+      type: DataTypes.STRING,
+    },
     profilePhoto: {
       type: DataTypes.STRING,
     },

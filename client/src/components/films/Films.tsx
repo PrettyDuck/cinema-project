@@ -60,12 +60,12 @@ const Films: React.FC = () => {
               <input
                 className='w-full py-4 px-6 text-gray-700 focus:outline-none'
                 type='search'
-                placeholder='Search...'
+                placeholder='Search Film By Name...'
                 onChange={onChangeSearch}
               />
               <div className='p-4'>
                 <button
-                  className='bg-blue-500 text-white rounded-full p-2 hover:bg-blue-400 focus:outline-none w-12 h-12 flex items-center justify-center'
+                  className='bg-teal-600 text-white rounded-full p-2 hover:bg-teal-500 focus:outline-none w-12 h-12 flex items-center justify-center'
                   onClick={performSearch}>
                   <FontAwesomeIcon icon={faSearch} />
                 </button>

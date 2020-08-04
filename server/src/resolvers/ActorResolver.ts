@@ -3,31 +3,22 @@ import ActorType from "../types/ActorType";
 import ActorInput from "../input-types/ActorInputs";
 import Actor from "../../db/models/actorModel";
 import Film from "../../db/models/filmModel";
-import storeFS from '../utills/storeFile'
-
+import storeFile from "../utills/storeFile";
 
 @Resolver()
 export class ActorResolver {
   @Mutation(() => String)
   async addActor(@Arg("input", () => ActorInput) input: ActorInput) {
     try {
-      const { name, birthYear, profilePhoto } = input;
-      const { filename, createReadStream } = await profilePhoto;
-      const stream = createReadStream();
-      const pathObj: any = await storeFS({ stream, filename });
-      let fileLocation = pathObj.path;
-      // Path String Refactoring
-      console.log(fileLocation)
-      const pathExecutorPattern = new RegExp('\.\.\/(?=uploads\/)')
-      fileLocation = fileLocation.split(pathExecutorPattern)[1]
-      fileLocation = fileLocation.replace(/\//g, "\\")
-      console.log(fileLocation)
+      const { name, birthYear, actorBio, profilePhoto } = input;
+      const fileLocation = await storeFile(profilePhoto);
       await Actor.create({
         name,
         birthYear,
-        profilePhoto:fileLocation,
+        actorBio,
+        profilePhoto: fileLocation,
       });
-      return 'New Actor Added';
+      return "New Actor Added";
     } catch (err) {
       console.log(err);
     }
@@ -61,13 +52,13 @@ export class ActorResolver {
       console.log(err);
     }
   }
-  @Query(()=>[ActorType])
-  async actors(){
+  @Query(() => [ActorType])
+  async actors() {
     try {
       const res = await Actor.findAll();
       return res;
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
 }

@@ -200,7 +200,7 @@ const FilmForm: React.FC<any> = (props) => {
                   name='name'
                   value={name}
                   onChange={onChangeName}
-                  className='border border-gray-400 w-full h-10 rounded-md px-2 outline-none focus:shadow-inner focus:bg-green-100'
+                  className='border border-gray-400 w-full h-10 rounded-md px-2 outline-none focus:shadow-inner focus:bg-teal-100'
                   placeholder='For example: The Shawshank Redemption'
                   required
                 />
@@ -224,7 +224,7 @@ const FilmForm: React.FC<any> = (props) => {
                   name='year'
                   value={year}
                   onChange={onChangeYear}
-                  className='border border-gray-400 w-full h-10 rounded-md px-2 outline-none focus:shadow-inner focus:bg-green-100'
+                  className='border border-gray-400 w-full h-10 rounded-md px-2 outline-none focus:shadow-inner focus:bg-teal-100'
                   pattern='[0-9]*'
                   placeholder='For example: 1990'
                   required
@@ -238,7 +238,7 @@ const FilmForm: React.FC<any> = (props) => {
                   name='filmDirector'
                   value={filmDirector}
                   onChange={onChangeFilmDirector}
-                  className='border border-gray-400 w-full h-10 rounded-md px-2 outline-none focus:shadow-inner focus:bg-green-100'
+                  className='border border-gray-400 w-full h-10 rounded-md px-2 outline-none focus:shadow-inner focus:bg-teal-100'
                   placeholder='For example: Kventin Tarantino'
                   required
                 />
@@ -250,9 +250,10 @@ const FilmForm: React.FC<any> = (props) => {
                   name='filmDescription'
                   value={filmDescription}
                   onChange={onChangeFilmDescription}
-                  className='border border-gray-400 w-full h-20 rounded-md px-2 outline-none focus:shadow-inner focus:bg-green-100 resize-none'
+                  className='border border-gray-400 w-full h-20 rounded-md px-2 outline-none focus:shadow-inner focus:bg-teal-100 resize-none'
                   placeholder='For example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                  style={{ fontSize: '18px' }}></textarea>
+                  style={{ fontSize: '18px' }}
+                  required></textarea>
               </div>
               <div className='my-2 mx-6'>
                 <label htmlFor='averageRating'>Average Rating:</label>
@@ -261,7 +262,7 @@ const FilmForm: React.FC<any> = (props) => {
                   name='averageRating'
                   value={averageRating}
                   onChange={onChangeAverageRating}
-                  className='border border-gray-400 w-full h-10 rounded-md px-2 outline-none focus:shadow-inner focus:bg-green-100'
+                  className='border border-gray-400 w-full h-10 rounded-md px-2 outline-none focus:shadow-inner focus:bg-teal-100'
                   placeholder='For example: 8.7'
                   pattern='[0-9\.]*'
                   required
@@ -297,13 +298,13 @@ const FilmForm: React.FC<any> = (props) => {
                 <input
                   type='submit'
                   value='Update Film'
-                  className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-green-300 hover:bg-green-500 outline-none'
+                  className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-teal-500 hover:bg-teal-600 outline-none'
                 />
               ) : (
                 <input
                   type='submit'
                   value='Add Film'
-                  className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-green-300 hover:bg-green-500 outline-none'
+                  className='cursor-pointer uppercase border-none rounded-lg px-8 py-2 mb-4 self-center bg-teal-500 hover:bg-teal-600 outline-none'
                 />
               )}
             </form>
