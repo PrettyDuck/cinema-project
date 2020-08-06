@@ -46,7 +46,10 @@ export class ActorResolver {
   @Query(() => ActorType)
   async actor(@Arg("id", () => Int) id: number) {
     try {
-      const res = await Actor.findByPk(id);
+      const res = await Actor.findOne({
+        where: { id: id },
+        include: Film,
+      });
       return res;
     } catch (err) {
       console.log(err);

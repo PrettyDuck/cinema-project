@@ -5,9 +5,6 @@ const GET_ACTORS_QUERY = gql`
     actors {
       id
       name
-      birthYear
-      actorBio
-      profilePhoto
     }
   }
 `;

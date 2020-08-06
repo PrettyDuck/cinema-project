@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const GET_FILM_ADMIN_QUERY = gql`
-  query GetFilm($id: Int!) {
+  query GetFilmAdmin($id: Int!) {
     film(id: $id) {
       id
       name

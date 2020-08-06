@@ -8,6 +8,11 @@ const GET_ACTOR_QUERY = gql`
       birthYear
       actorBio
       profilePhoto
+      films {
+        id
+        name
+        year
+      }
     }
   }
 `;

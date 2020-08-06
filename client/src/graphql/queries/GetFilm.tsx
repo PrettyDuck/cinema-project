@@ -13,8 +13,6 @@ const GET_FILM_QUERY = gql`
       actors {
         id
         name
-        birthYear
-        profilePhoto
       }
     }
   }

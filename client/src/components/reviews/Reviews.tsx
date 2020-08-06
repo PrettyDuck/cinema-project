@@ -25,28 +25,6 @@ const Reviews: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
   }, [data]);
 
   return (
-    /*
-    <>
-      {loading && <div>Loading...</div>}
-      {error && <div>{error.message}</div>}
-      {!loading && data.reviews && state && (
-        <div className='flex items-start justify-around'>
-          <div>
-            <h2 className='text-gray-800 text-3xl font-semibold text-center'>User reviews</h2>
-            {state.reviews.length === 0 && (
-              <h4 className='text-2xl font-semibold text-center'>
-                There is no any user review yet.
-              </h4>
-            )}
-            {state.reviews.map((review: ReviewType) => (
-              <ReviewItem key={review.id} review={review} />
-            ))}
-          </div>
-          <AddRewiew targetFilmId={targetFilmId} />
-        </div>
-      )}
-    </>
-    */
     <>
       {loading && <div>Loading...</div>}
       {error && <div>{error.message}</div>}
