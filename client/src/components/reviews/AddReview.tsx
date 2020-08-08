@@ -6,7 +6,7 @@ import ADD_NEW_FILM_REVIEW from '../../graphql/mutations/AddFilmReview';
 import GET_FILM_REVIEWS from '../../graphql/queries/GetFilmReviews';
 
 const AddReview: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
-  const { state, dispatch } = useContext(reviewContext);
+  const { dispatch } = useContext(reviewContext);
 
   // Manually update the cache after mutation
   const [addReview] = useMutation(ADD_NEW_FILM_REVIEW, {

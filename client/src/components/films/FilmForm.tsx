@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
 import GET_CATEGORIES_QUERY from '../../graphql/queries/GetCategories';
@@ -17,6 +17,8 @@ interface SelectOption {
 }
 
 const FilmForm: React.FC<any> = (props) => {
+  let tempCategories: any = null;
+  let tempActors: any = null;
   const { data: filmData, loading: filmLoading, error: filmError } = useQuery(
     GET_FILM_ADMIN_QUERY,
     {
@@ -24,6 +26,14 @@ const FilmForm: React.FC<any> = (props) => {
         id: props.location.state.filmId,
       },
       skip: props.isUpdate === false,
+      onCompleted: (d) => {
+        tempCategories = d.film.categories.map((category: CategoryType) => {
+          return { label: category.name, value: category.id };
+        });
+        tempActors = d.film.actors.map((actor: ActorType) => {
+          return { label: actor.name, value: actor.id };
+        });
+      },
     },
   );
 
@@ -82,30 +92,26 @@ const FilmForm: React.FC<any> = (props) => {
     setCoverImage(e.target.files![0]);
   };
 
-  let unmounted = false;
+  const _isMounted = useRef(true);
   useEffect(() => {
     if (!filmError && !filmLoading && props.isUpdate) {
-      if (!unmounted) {
-        setName(filmData.film.name);
-        const tempCategories = filmData.film.categories.map((category: CategoryType) => {
-          return { label: category.name, value: category.id };
-        });
+      console.log('Here');
+      setName(filmData.film.name);
+      if (_isMounted) {
         setSelectedCategories(tempCategories);
-        setYear(filmData.film.year);
-        setFilmDirector(filmData.film.filmDirector);
-        setFilmDescription(filmData.film.filmDescription);
-        setAverageRating(filmData.film.averageRating);
-        const tempActors = filmData.film.actors.map((actor: ActorType) => {
-          return { label: actor.name, value: actor.id };
-        });
+      }
+      setYear(filmData.film.year);
+      setFilmDirector(filmData.film.filmDirector);
+      setFilmDescription(filmData.film.filmDescription);
+      setAverageRating(filmData.film.averageRating);
+      if (_isMounted) {
         setSelectedAuthors(tempActors);
       }
     }
     return () => {
-      unmounted = true;
-      console.log('HERE')
+      _isMounted.current = false;
     };
-  }, [filmLoading]);
+  }, [filmData]);
 
   const history = useHistory();
 

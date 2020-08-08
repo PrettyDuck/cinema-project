@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import FilmItem from './FilmItem';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import GET_FILMS_QUERY from '../../graphql/queries/GetFilms';
@@ -6,7 +6,7 @@ import GET_FILMS_SEARCH_QUERY from '../../graphql/queries/GetFilmsSearch';
 import { Waypoint } from 'react-waypoint';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks';
 
 const Films: React.FC = () => {
   const client = useApolloClient();
@@ -44,6 +44,7 @@ const Films: React.FC = () => {
     }
   };
   const performSearch = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     if (searchText !== '') {
       searchFilms({ variables: { searchText: searchText } });
     }

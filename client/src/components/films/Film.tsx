@@ -25,7 +25,7 @@ const Film: React.FC = ({ match }: any) => {
               {data.film.actors.length === 0 ? null : (
                 <div className='mb-2 flex flex-col items-center justify-center'>
                   <span>Stars:</span>
-                  <ul className="flex flex-col items-center justify-center">
+                  <ul className='flex flex-col items-center justify-center'>
                     {data.film.actors.map((actor: ActorType) => (
                       <li key={actor.id}>
                         <Link to={`/actors/${actor.id}`}>{actor.name}</Link>

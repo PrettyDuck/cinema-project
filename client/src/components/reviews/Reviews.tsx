@@ -5,7 +5,7 @@ import AddRewiew from './AddReview';
 import reviewContext from '../../reviewContext';
 import GET_FILM_REVIEWS from '../../graphql/queries/GetFilmReviews';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Pagination} from 'swiper';
+import SwiperCore, { Pagination } from 'swiper';
 import 'swiper/swiper-bundle.css';
 
 const Reviews: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
