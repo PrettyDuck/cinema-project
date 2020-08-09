@@ -8,6 +8,8 @@ import Film from './components/films/Film';
 import FilmForm from './components/films/FilmForm';
 import Actor from './components/actors/Actor';
 import AddActorForm from './components/actors/AddActorForm';
+import RegisterForm from './components/auth/RegisterForm';
+import LoginForm from './components/auth/LoginForm';
 import ReviewContext from './reviewContext';
 import reviewReducer from './reviewReducer';
 import './App.css';
@@ -22,6 +24,8 @@ const App: React.FC = () => {
         <div className='mb-auto'>
           <ReviewContext.Provider value={{ state, dispatch }}>
             <Switch>
+              <Route exact path='/login' component={LoginForm} />
+              <Route exact path='/register' component={RegisterForm} />
               <Route exact path='/' component={Home} />
               <Route exact path='/films/:id' component={Film} />
               <Route exact path='/addActor' component={AddActorForm} />

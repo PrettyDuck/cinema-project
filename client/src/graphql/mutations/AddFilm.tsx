@@ -18,9 +18,7 @@ const ADD_FILM = gql`
         averageRating: $averageRating
         coverImage: $coverImage
       }
-    ) {
-      id
-    }
+    )
   }
 `;
 export default ADD_FILM;

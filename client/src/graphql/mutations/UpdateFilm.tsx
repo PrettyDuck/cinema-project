@@ -20,9 +20,7 @@ const UPDATE_FILM = gql`
         coverImage: $coverImage
       }
       id: $id
-    ) {
-      id
-    }
+    )
   }
 `;
 export default UPDATE_FILM;

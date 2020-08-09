@@ -27,6 +27,7 @@ const FilmForm: React.FC<any> = (props) => {
       },
       skip: props.isUpdate === false,
       onCompleted: (d) => {
+        // Converting film's actors and categories into valid format
         tempCategories = d.film.categories.map((category: CategoryType) => {
           return { label: category.name, value: category.id };
         });
@@ -95,18 +96,13 @@ const FilmForm: React.FC<any> = (props) => {
   const _isMounted = useRef(true);
   useEffect(() => {
     if (!filmError && !filmLoading && props.isUpdate) {
-      console.log('Here');
       setName(filmData.film.name);
-      if (_isMounted) {
-        setSelectedCategories(tempCategories);
-      }
+      setSelectedCategories(tempCategories);
       setYear(filmData.film.year);
       setFilmDirector(filmData.film.filmDirector);
       setFilmDescription(filmData.film.filmDescription);
       setAverageRating(filmData.film.averageRating);
-      if (_isMounted) {
-        setSelectedAuthors(tempActors);
-      }
+      setSelectedAuthors(tempActors);
     }
     return () => {
       _isMounted.current = false;
@@ -144,11 +140,13 @@ const FilmForm: React.FC<any> = (props) => {
           updatedFilm.coverImage = coverImage;
         }
         console.log(updatedFilm);
+        // res = created film ID
         const res = await updateFilm({
           variables: updatedFilm,
         });
         console.log(res);
       } else {
+        // res = created film ID
         const res = await addFilm({
           variables: {
             name: name,
@@ -160,20 +158,20 @@ const FilmForm: React.FC<any> = (props) => {
           },
         });
         console.log(res);
-        for await (let category of selectedCategories) {
+        for await (const category of selectedCategories) {
           const categoriesRes = await addFilmCategory({
             variables: {
               categoryId: category.value,
-              filmId: res.data.addFilm.id,
+              filmId: res.data.addFilm,
             },
           });
           console.log(categoriesRes);
         }
-        for await (let actor of selectedAuthors) {
+        for await (const actor of selectedAuthors) {
           const actorRes = await addFilmActor({
             variables: {
               actorId: actor.value,
-              filmId: res.data.addFilm.id,
+              filmId: res.data.addFilm,
             },
           });
           console.log(actorRes);

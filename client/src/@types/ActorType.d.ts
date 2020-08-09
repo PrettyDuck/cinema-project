@@ -4,5 +4,4 @@ declare type ActorType = {
   birthYear: number;
   actorBio: string;
   profilePhoto: string;
-
 };

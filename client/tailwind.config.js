@@ -1,6 +1,9 @@
 module.exports = {
   purge: [],
   theme: {
+    textColor: {
+      customDark: '#2b2b2b',
+    },
     minWidth: {
       '0': '0',
       '1/4': '25%',

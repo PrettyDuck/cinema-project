@@ -1,4 +1,4 @@
 declare type CategoryType = {
-    id: number,
-    name: string
-}
+  id: number;
+  name: string;
+};

@@ -12,7 +12,7 @@ const Op = Sequelize.Op;
 
 @Resolver()
 export class FilmResolver {
-  @Mutation(() => FilmType)
+  @Mutation(() => Number)
   async addFilm(@Arg("input", () => FilmInput) input: FilmInput) {
     try {
       const {
@@ -24,7 +24,7 @@ export class FilmResolver {
         coverImage,
       } = input;
       const fileLocation = await storeFile(coverImage);
-      const createdFilm = await Film.create({
+      const createdFilm: any = await Film.create({
         name,
         year,
         filmDirector,
@@ -32,12 +32,12 @@ export class FilmResolver {
         averageRating,
         coverImage: fileLocation,
       });
-      return createdFilm;
+      return createdFilm.id;
     } catch (err) {
       console.log(err);
     }
   }
-  @Mutation(() => FilmType)
+  @Mutation(() => Number)
   async updateFilm(
     @Arg("id", () => Int) id: number,
     @Arg("input", () => FilmUpdateInput) input: FilmUpdateInput
@@ -49,8 +49,8 @@ export class FilmResolver {
       }
 
       await Film.update(input, { where: { id: id } });
-      const updatedFilm = await Film.findByPk(id);
-      return updatedFilm;
+      const updatedFilm: any = await Film.findByPk(id);
+      return updatedFilm.id;
     } catch (err) {
       console.log(err);
     }

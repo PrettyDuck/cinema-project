@@ -21,6 +21,12 @@ import { generateRefreshToken, generateAccessToken } from "./utills/authTokens";
   const app = express();
   dotenv.config();
   const PORT: number = 5000;
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
   app.use(cookieParser());
   // route for token refreshing
   app.post("/refresh_token", (req, res) => {
@@ -55,7 +61,6 @@ import { generateRefreshToken, generateAccessToken } from "./utills/authTokens";
     return res.send({ ok: true, accessToken: generateAccessToken(user) });
   });
 
-  app.use(cors());
   app.use("/uploads", express.static("uploads"));
   app.use("/films/uploads", express.static("uploads"));
   app.use("/actors/uploads", express.static("uploads"));

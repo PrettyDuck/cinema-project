@@ -1,6 +1,6 @@
 type Action = { type: 'GET_REVIEWS'; payload: [] };
 
-export default function reviewReducer(state: any, action: Action) {
+function reviewReducer(state: any, action: Action): any {
   switch (action.type) {
     case 'GET_REVIEWS':
       return {
@@ -11,3 +11,4 @@ export default function reviewReducer(state: any, action: Action) {
       return state;
   }
 }
+export default reviewReducer;

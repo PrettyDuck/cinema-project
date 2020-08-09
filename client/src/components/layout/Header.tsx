@@ -15,7 +15,7 @@ const Header: React.FC = () => {
           Cinema Project
         </Link>
       </div>
-      <div className='flex items-center justify-between w-2/12'>
+      <div className='flex items-center justify-between w-1/4'>
         <div className='text-lg'>
           <Link to='/addActor' className=' text-white hover:text-teal-300'>
             Add Actor
@@ -27,6 +27,13 @@ const Header: React.FC = () => {
             onClick={clickHandler}>
             Add Film
           </button>
+        </div>
+        <div className='text-lg'>
+          <Link
+            to='/login'
+            className='font-semibold text-xl tracking-tight text-white hover:text-teal-300'>
+            Login
+          </Link>
         </div>
       </div>
     </nav>

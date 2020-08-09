@@ -28,7 +28,7 @@ export class CategoryResolver {
         include: Category,
       });
       console.log(res.toJSON());
-      return `Relation between film with id:${filmId} and actor whith id:${categoryId} formed successfully`;
+      return `Relation between film with id:${filmId} and category with id:${categoryId} formed successfully`;
     } catch (err) {
       console.log(err);
     }

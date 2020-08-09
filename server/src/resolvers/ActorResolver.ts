@@ -12,13 +12,13 @@ export class ActorResolver {
     try {
       const { name, birthYear, actorBio, profilePhoto } = input;
       const fileLocation = await storeFile(profilePhoto);
-      await Actor.create({
+      const createdActor: any = await Actor.create({
         name,
         birthYear,
         actorBio,
         profilePhoto: fileLocation,
       });
-      return "New Actor Added";
+      return `New actor with name ${createdActor.name} added successfully`;
     } catch (err) {
       console.log(err);
     }
@@ -37,7 +37,7 @@ export class ActorResolver {
         include: Actor,
       });
       console.log(res.toJSON());
-      return `Relation between film with id:${filmId} and actor whith id:${actorId} formed successfully`;
+      return `Relation between film with id:${filmId} and actor with id:${actorId} formed successfully`;
     } catch (err) {
       console.log(err);
     }

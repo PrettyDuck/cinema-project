@@ -1,6 +1,6 @@
 declare type ReviewType = {
-    id:number,
-    ownerName: string,
-    ratingPoint: number,
-    reviewText: string
-}
+  id: number;
+  ownerName: string;
+  ratingPoint: number;
+  reviewText: string;
+};
