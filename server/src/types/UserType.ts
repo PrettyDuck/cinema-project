@@ -1,6 +1,6 @@
 import { ObjectType, Int, Field } from "type-graphql";
 
-@ObjectType({ description: "Actor Type" })
+@ObjectType({ description: "User Type" })
 class UserType {
   @Field(() => Int)
   id!: number;
@@ -8,8 +8,6 @@ class UserType {
   name!: string;
   @Field(() => String)
   email!: string;
-  @Field(() => String)
-  password!: string;
 }
 
 export default UserType;

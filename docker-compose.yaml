@@ -1,27 +1,27 @@
-version: '3'
+version: "3"
 services:
-    # CLIENT CONTAINER
-    client:
-        build: ./client
-        ports: 
-            - '3000:3000'
-        depends_on:
-            - server
-        stdin_open: true
-    # SERVER CONTAINER 
-    server:
-        build: ./server
-        ports: 
-            - '5000:5000'
-        depends_on: 
-            - mysqlHost
-    mysqlHost:
-        image: mysql
-        container_name: mysqlHost
-        environment:
-            MYSQL_ROOT_PASSWORD: Redoctopus353
-            MYSQL_DATABASE: filmsdb
-        ports: 
-            - '3306:3306'
-        volumes:
-            - ./mysql-dump:/docker-entrypoint-initdb.d
+  # CLIENT CONTAINER
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+    stdin_open: true
+  # SERVER CONTAINER
+  server:
+    build: ./server
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysqlHost
+  mysqlHost:
+    image: mysql
+    container_name: mysqlHost
+    environment:
+      MYSQL_ROOT_PASSWORD: Redoctopus353
+      MYSQL_DATABASE: filmsdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-dump:/docker-entrypoint-initdb.d

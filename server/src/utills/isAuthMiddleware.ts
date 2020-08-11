@@ -2,7 +2,7 @@ import { MiddlewareFn } from "type-graphql";
 import { ContextType } from "../types/ContextType";
 import { verify } from "jsonwebtoken";
 
-// format = bearer [token it'self]
+// format = Bearer [token it'self]
 
 export const isAuth: MiddlewareFn<ContextType> = ({ context }, next) => {
   const auth = context.req.headers["authorization"];

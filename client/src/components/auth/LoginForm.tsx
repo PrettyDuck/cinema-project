@@ -7,6 +7,8 @@ import showHidePassword from '../utils/Show-HidePassword';
 import FormAlert from '../layout/FormAlert';
 import alertHandler from '../utils/AlertHandler';
 import LOGIN_USER from '../../graphql/mutations/LoginUser';
+import { setAccessToken } from '../../accessToken';
+import GET_CURRENT_USER_QUERY from '../../graphql/queries/GetCurrentUser';
 
 const LoginForm: React.FC = () => {
   const history = useHistory();
@@ -31,8 +33,22 @@ const LoginForm: React.FC = () => {
             email: email,
             password: password,
           },
+          update: (store, { data }) => {
+            if (!data) {
+              return null;
+            }
+            store.writeQuery({
+              query: GET_CURRENT_USER_QUERY,
+              data: {
+                getCurrentUser: data.login.user,
+              },
+            });
+          },
         });
         console.log(res);
+        if (res.data) {
+          setAccessToken(res.data.login);
+        }
         history.push('/');
       }
     } catch (error) {

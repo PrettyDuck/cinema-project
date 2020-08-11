@@ -6,7 +6,7 @@ export const generateAccessToken = (user: any) => {
   };
   const s: string = process.env.ACCESS_TOKEN_SECRET!;
   // Generate token
-  return sign(payload, s, { expiresIn: 36000 });
+  return sign(payload, s, { expiresIn: "15m" });
 };
 
 export const generateRefreshToken = (user: any) => {

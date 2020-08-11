@@ -13,8 +13,12 @@ import { ContextType } from "../types/ContextType";
 import {
   generateAccessToken,
   generateRefreshToken,
-} from "../utills/authTokens";
+} from "../utills/authTokensGenerators";
 import { isAuth } from "../utills/isAuthMiddleware";
+import UserType from "../types/UserType";
+import { verify } from "jsonwebtoken";
+import { sendRefreshToken } from "../utills/sendRefreshToken";
+import LoginResponseType from "../types/LoginResponseType";
 
 @Resolver()
 export class UserResolver {
@@ -37,7 +41,7 @@ export class UserResolver {
       console.log(err);
     }
   }
-  @Mutation(() => String)
+  @Mutation(() => LoginResponseType)
   async login(@Arg("input") input: LoginUserInput, @Ctx() ctx: ContextType) {
     const { req, res } = ctx;
     const { email, password } = input;
@@ -56,19 +60,43 @@ export class UserResolver {
       const token = generateAccessToken(user);
 
       // Refresh token
-      res.cookie("id", generateRefreshToken(user), {
-        httpOnly: true,
-      });
+      sendRefreshToken(res, generateRefreshToken(user));
 
-      return token;
+      return {
+        accessToken: token,
+        user: user,
+      };
     } catch (err) {
       console.log(err);
     }
+  }
+
+  @Mutation(() => Boolean)
+  async logout(@Ctx() context: ContextType) {
+    sendRefreshToken(context.res, "");
+    return true;
   }
 
   @Query(() => String)
   @UseMiddleware(isAuth)
   sayHi(@Ctx() { payload }: ContextType) {
     return `Hi, dude your id is ${payload!.id}`;
+  }
+
+  @Query(() => UserType, { nullable: true })
+  getCurrentUser(@Ctx() context: ContextType) {
+    const auth = context.req.headers["authorization"];
+    if (!auth) {
+      return null;
+    }
+    try {
+      const token = auth.split(" ")[1];
+      const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
+      context.payload = payload as any;
+      return User.findOne(payload.id);
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 }

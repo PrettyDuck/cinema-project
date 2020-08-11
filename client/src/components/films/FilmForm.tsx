@@ -124,21 +124,13 @@ const FilmForm: React.FC<any> = (props) => {
         const updatedFilm: any = {
           id: filmData.film.id,
         };
-        if (name !== filmData.film.name) {
-          updatedFilm.name = name;
-        }
-        if (year !== filmData.film.year) {
-          updatedFilm.year = year;
-        }
-        if (filmDirector !== filmData.film.filmDirector) {
-          updatedFilm.filmDirector = filmDirector;
-        }
-        if (averageRating !== filmData.film.averageRating) {
+        if (name !== filmData.film.name) updatedFilm.name = name;
+        if (year !== filmData.film.year) updatedFilm.year = year;
+        if (filmDirector !== filmData.film.filmDirector) updatedFilm.filmDirector = filmDirector;
+        if (averageRating !== filmData.film.averageRating)
           updatedFilm.averageRating = averageRating;
-        }
-        if (coverImage.name !== 'name') {
-          updatedFilm.coverImage = coverImage;
-        }
+        if (coverImage.name !== 'name') updatedFilm.coverImage = coverImage;
+
         console.log(updatedFilm);
         // res = created film ID
         const res = await updateFilm({

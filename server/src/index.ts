@@ -13,9 +13,7 @@ import cors from "cors";
 import { graphqlUploadExpress } from "graphql-upload";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import { verify } from "jsonwebtoken";
-import User from "../db/models/userModel";
-import { generateRefreshToken, generateAccessToken } from "./utills/authTokens";
+import refreshTokenRoute from "./routes/refreshTokenRoute";
 
 (async () => {
   const app = express();
@@ -28,38 +26,9 @@ import { generateRefreshToken, generateAccessToken } from "./utills/authTokens";
     })
   );
   app.use(cookieParser());
+
   // route for token refreshing
-  app.post("/refresh_token", (req, res) => {
-    // console.log(req.headers);
-    const token = req.cookies.id;
-    if (!token) {
-      return res.send({ ok: false, accessToken: "" });
-    }
-
-    let payload: any = null;
-    try {
-      payload = verify(token, process.env.REFRESH_TOKEN_SECRET!);
-    } catch (error) {
-      console.log(error);
-      return res.send({ ok: false, accessToken: "" });
-    }
-    // Token is valid
-    const user = User.findOne({
-      where: {
-        id: payload.id,
-      },
-    });
-    if (!user) {
-      return res.send({ ok: false, accessToken: "" });
-    }
-
-    // Generate new refresh token also
-    res.cookie("id", generateRefreshToken(user), {
-      httpOnly: true,
-    });
-
-    return res.send({ ok: true, accessToken: generateAccessToken(user) });
-  });
+  app.use("/refresh_token", refreshTokenRoute);
 
   app.use("/uploads", express.static("uploads"));
   app.use("/films/uploads", express.static("uploads"));

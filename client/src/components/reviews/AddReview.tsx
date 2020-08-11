@@ -86,7 +86,6 @@ const AddReview: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
             />
           </div>
           <StarRatingComponent
-            className='px-3'
             name='rating'
             starCount={10}
             value={ratingPoint}
