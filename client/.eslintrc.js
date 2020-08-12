@@ -1,4 +1,3 @@
-/*
 module.exports = {
   env: {
     browser: true,
@@ -21,4 +20,3 @@ module.exports = {
   plugins: ['react', '@typescript-eslint'],
   rules: { 'react/prop-types': 0 },
 };
-*/

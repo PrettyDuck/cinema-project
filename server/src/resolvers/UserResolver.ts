@@ -42,30 +42,33 @@ export class UserResolver {
     }
   }
   @Mutation(() => LoginResponseType)
-  async login(@Arg("input") input: LoginUserInput, @Ctx() ctx: ContextType) {
-    const { req, res } = ctx;
+  async login(
+    @Arg("input") input: LoginUserInput,
+    @Ctx() context: ContextType
+  ) {
+    const { req, res } = context;
     const { email, password } = input;
     try {
       const user: any = await User.findOne({
         where: { email: email },
       });
-      if (!user) {
-        return "User is not exist";
+      if (user) {
+        const valid = await compare(password, user.password);
+        if (valid) {
+          // Access token
+          const token = generateAccessToken(user);
+          // Refresh token
+          sendRefreshToken(res, generateRefreshToken(user));
+          return {
+            accessToken: token,
+            user: user,
+          };
+        } else {
+          throw Error("Password do not match");
+        }
+      } else {
+        throw Error("User is not exist");
       }
-      const valid = await compare(password, user.password);
-      if (!valid) {
-        return "Password is not valid";
-      }
-      // Access token
-      const token = generateAccessToken(user);
-
-      // Refresh token
-      sendRefreshToken(res, generateRefreshToken(user));
-
-      return {
-        accessToken: token,
-        user: user,
-      };
     } catch (err) {
       console.log(err);
     }
@@ -80,11 +83,11 @@ export class UserResolver {
   @Query(() => String)
   @UseMiddleware(isAuth)
   sayHi(@Ctx() { payload }: ContextType) {
-    return `Hi, dude your id is ${payload!.id}`;
+    return `Hi, dude your id is ${payload!.userId}`;
   }
 
   @Query(() => UserType, { nullable: true })
-  getCurrentUser(@Ctx() context: ContextType) {
+  async getCurrentUser(@Ctx() context: ContextType) {
     const auth = context.req.headers["authorization"];
     if (!auth) {
       return null;
@@ -92,8 +95,9 @@ export class UserResolver {
     try {
       const token = auth.split(" ")[1];
       const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
-      context.payload = payload as any;
-      return User.findOne(payload.id);
+      context.payload = { userId: payload.userId };
+      const user: any = await User.findOne({ where: { id: payload.userId } });
+      return user;
     } catch (err) {
       console.log(err);
       return null;

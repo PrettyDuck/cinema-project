@@ -1,6 +1,10 @@
 import "reflect-metadata";
 import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import sequelize from "../db/database";
+import { graphqlUploadExpress } from "graphql-upload";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { FilmResolver } from "./resolvers/FilmResolver";
@@ -9,16 +13,11 @@ import { ReviewResolver } from "./resolvers/ReviewResovler";
 import { ActorResolver } from "./resolvers/ActorResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 import initRelations from "../db/relations";
-import cors from "cors";
-import { graphqlUploadExpress } from "graphql-upload";
-import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
 import refreshTokenRoute from "./routes/refreshTokenRoute";
 
 (async () => {
   const app = express();
   dotenv.config();
-  const PORT: number = 5000;
   app.use(
     cors({
       origin: "http://localhost:3000",
@@ -39,11 +38,11 @@ import refreshTokenRoute from "./routes/refreshTokenRoute";
   const appoloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [
+        UserResolver,
         FilmResolver,
         CategoryResolver,
         ReviewResolver,
         ActorResolver,
-        UserResolver,
       ],
     }),
     context: ({ req, res }) => ({ req, res }),
@@ -51,7 +50,7 @@ import refreshTokenRoute from "./routes/refreshTokenRoute";
   });
   appoloServer.applyMiddleware({ app, cors: false });
   initRelations();
-
+  const PORT: number = 5000;
   let attempts: number = 20;
   while (attempts) {
     try {

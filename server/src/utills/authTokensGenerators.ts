@@ -1,19 +1,13 @@
 import { sign } from "jsonwebtoken";
 
 export const generateAccessToken = (user: any) => {
-  const payload = {
-    id: user.id,
-  };
-  const s: string = process.env.ACCESS_TOKEN_SECRET!;
-  // Generate token
-  return sign(payload, s, { expiresIn: "15m" });
+  return sign({ userId: `${user.id}` }, process.env.ACCESS_TOKEN_SECRET!, {
+    expiresIn: "15m",
+  });
 };
 
 export const generateRefreshToken = (user: any) => {
-  const payload = {
-    id: user.id,
-  };
-  const rs: string = process.env.REFRESH_TOKEN_SECRET!;
-  // Generate Refresh Token
-  return sign(payload, rs, { expiresIn: "7d" });
+  return sign({ userId: `${user.id}` }, process.env.REFRESH_TOKEN_SECRET!, {
+    expiresIn: "7d",
+  });
 };

@@ -4,8 +4,8 @@ import UserType from "./UserType";
 @ObjectType()
 class LoginResponseType {
   @Field(() => String)
-  accessToken!: string;
+  accessToken?: string;
   @Field(() => UserType)
-  user!: UserType;
+  user?: UserType;
 }
 export default LoginResponseType;

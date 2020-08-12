@@ -13,6 +13,7 @@ import GET_CURRENT_USER_QUERY from '../../graphql/queries/GetCurrentUser';
 const LoginForm: React.FC = () => {
   const history = useHistory();
   const [login] = useMutation(LOGIN_USER);
+
   const [email, setEmail] = useState('');
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
   const [password, setPassword] = useState('');
@@ -45,14 +46,16 @@ const LoginForm: React.FC = () => {
             });
           },
         });
-        console.log(res);
         if (res.data) {
           setAccessToken(res.data.login);
         }
         history.push('/');
       }
     } catch (error) {
-      console.log(error);
+      console.log();
+      if (alertMessage === '') {
+        alertHandler(setAlertMessage, 'Login Error. Check your e-mail address or password');
+      }
     }
   };
 

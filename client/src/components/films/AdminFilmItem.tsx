@@ -6,7 +6,6 @@ import DELETE_FILM from '../../graphql/mutations/DeleteFilm';
 
 const AdminFilmItem: React.FC<{ film: AdminFilmItemType }> = ({ film }) => {
   const { refetch } = useQuery(GET_FILMS_ADMIN_QUERY);
-
   const [deleteFilm] = useMutation(DELETE_FILM);
 
   const deleteItem = async (event: React.MouseEvent<HTMLButtonElement>) => {

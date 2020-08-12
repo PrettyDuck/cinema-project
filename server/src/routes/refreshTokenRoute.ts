@@ -10,7 +10,7 @@ import { sendRefreshToken } from "../utills/sendRefreshToken";
 const router = express.Router();
 
 // route for token refreshing
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   // console.log(req.headers);
   const token = req.cookies.id;
   if (!token) {
@@ -24,9 +24,9 @@ router.post("/", (req, res) => {
     return res.send({ ok: false, accessToken: "" });
   }
   // Token is valid
-  const user = User.findOne({
+  const user = await User.findOne({
     where: {
-      id: payload.id,
+      id: payload.userId,
     },
   });
   if (!user) {

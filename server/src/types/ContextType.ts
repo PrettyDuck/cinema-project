@@ -4,6 +4,6 @@ export interface ContextType {
   req: Request;
   res: Response;
   payload?: {
-    id: string;
+    userId: string;
   };
 }

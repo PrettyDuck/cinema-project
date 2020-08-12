@@ -50,6 +50,9 @@ const RegisterForm: React.FC = () => {
       }
     } catch (error) {
       console.log(error);
+      if (alertMessage === '') {
+        alertHandler(setAlertMessage, 'Registration failed. Please try again');
+      }
     }
   };
 

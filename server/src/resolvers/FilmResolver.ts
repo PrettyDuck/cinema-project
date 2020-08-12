@@ -1,4 +1,11 @@
-import { Query, Mutation, Arg, Resolver, Int } from "type-graphql";
+import {
+  Query,
+  Mutation,
+  Arg,
+  Resolver,
+  Int,
+  UseMiddleware,
+} from "type-graphql";
 import { FilmInput, FilmUpdateInput } from "../input-types/FilmInputs";
 import FilmType from "../types/FilmType";
 import GetFilmsResponseType from "../types/GetFilmsResponseType";
@@ -6,6 +13,8 @@ import Film from "../../db/models/filmModel";
 import Actor from "../../db/models/actorModel";
 import storeFile from "../utills/storeFile";
 import Category from "../../db/models/categoryModel";
+import { isAuth } from "../utills/isAuthMiddleware";
+import { isAdmin } from "../utills/isAdminMiddleware";
 
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
@@ -13,6 +22,7 @@ const Op = Sequelize.Op;
 @Resolver()
 export class FilmResolver {
   @Mutation(() => Number)
+  @UseMiddleware(isAuth, isAdmin)
   async addFilm(@Arg("input", () => FilmInput) input: FilmInput) {
     try {
       const {
@@ -38,6 +48,7 @@ export class FilmResolver {
     }
   }
   @Mutation(() => Number)
+  @UseMiddleware(isAuth, isAdmin)
   async updateFilm(
     @Arg("id", () => Int) id: number,
     @Arg("input", () => FilmUpdateInput) input: FilmUpdateInput
@@ -56,6 +67,7 @@ export class FilmResolver {
     }
   }
   @Mutation(() => String)
+  @UseMiddleware(isAuth, isAdmin)
   async deleteFilm(@Arg("id", () => Int) id: number) {
     try {
       await Film.destroy({ where: { id: id } });
@@ -124,6 +136,7 @@ export class FilmResolver {
     }
   }
   @Query(() => [FilmType])
+  @UseMiddleware(isAuth, isAdmin)
   async adminFilms(@Arg("page", () => Int, { nullable: true }) page: number) {
     try {
       const res = await Film.findAll({
