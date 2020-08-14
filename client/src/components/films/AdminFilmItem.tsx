@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import GET_FILMS_ADMIN_QUERY from '../../graphql/queries/GetFilmsAdmin';
 import DELETE_FILM from '../../graphql/mutations/DeleteFilm';
 

@@ -134,24 +134,28 @@ const FilmForm: React.FC<any> = (props) => {
         const res = await updateFilm({
           variables: updatedFilm,
           update: (store, { data }) => {
-            if (!data) {
-              return null;
-            }
-            // console.log(data);
-            const existingFilms: any = store.readQuery({ query: GET_FILMS_ADMIN_QUERY });
-            if (existingFilms.adminFilms) {
-              store.writeQuery({
-                query: GET_FILMS_ADMIN_QUERY,
-                data: {
-                  adminFilms: existingFilms.adminFilms.map((f: AdminFilmItemType) => {
-                    if (f.id === updatedFilm.id) {
-                      return { ...f, ...data.updateFilm };
-                    } else {
-                      return f;
-                    }
-                  }),
-                },
-              });
+            try {
+              if (!data) {
+                return null;
+              }
+              // console.log(data);
+              const existingFilms: any = store.readQuery({ query: GET_FILMS_ADMIN_QUERY });
+              if (existingFilms.adminFilms) {
+                store.writeQuery({
+                  query: GET_FILMS_ADMIN_QUERY,
+                  data: {
+                    adminFilms: existingFilms.adminFilms.map((f: AdminFilmItemType) => {
+                      if (f.id === updatedFilm.id) {
+                        return { ...f, ...data.updateFilm };
+                      } else {
+                        return f;
+                      }
+                    }),
+                  },
+                });
+              }
+            } catch (err) {
+              console.log(err);
             }
           },
         });
@@ -168,18 +172,22 @@ const FilmForm: React.FC<any> = (props) => {
             coverImage: coverImage,
           },
           update: (store, { data }) => {
-            if (!data) {
-              return null;
-            }
-            // console.log(data);
-            const existingFilms: any = store.readQuery({ query: GET_FILMS_ADMIN_QUERY });
-            if (existingFilms.adminFilms) {
-              store.writeQuery({
-                query: GET_FILMS_ADMIN_QUERY,
-                data: {
-                  adminFilms: [data.addFilm, ...existingFilms.adminFilms],
-                },
-              });
+            try {
+              if (!data) {
+                return null;
+              }
+              // console.log(data);
+              const existingFilms: any = store.readQuery({ query: GET_FILMS_ADMIN_QUERY });
+              if (existingFilms.adminFilms) {
+                store.writeQuery({
+                  query: GET_FILMS_ADMIN_QUERY,
+                  data: {
+                    adminFilms: [data.addFilm, ...existingFilms.adminFilms],
+                  },
+                });
+              }
+            } catch (err) {
+              console.log(err);
             }
           },
         });

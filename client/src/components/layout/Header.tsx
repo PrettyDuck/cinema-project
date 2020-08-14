@@ -18,6 +18,7 @@ const Header: React.FC = () => {
 
   const LogoutHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    await history.push('/login');
     await logout();
     setAccessToken('');
     await client.resetStore();

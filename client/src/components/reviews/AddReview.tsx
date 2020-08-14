@@ -18,7 +18,7 @@ const AddReview: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
       cache.writeQuery({
         query: GET_FILM_REVIEWS,
         variables: { filmId: parseInt(targetFilmId) },
-        data: { reviews: reviews.push(addReview) },
+        data: { reviews: [addReview, ...reviews] },
       });
       dispatch({
         type: 'GET_REVIEWS',
