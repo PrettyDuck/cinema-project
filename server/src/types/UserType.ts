@@ -8,6 +8,8 @@ class UserType {
   name!: string;
   @Field(() => String)
   email!: string;
+  @Field(()=>String)
+  role!: string;
 }
 
 export default UserType;

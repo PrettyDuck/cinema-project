@@ -21,6 +21,11 @@ const UPDATE_FILM = gql`
       }
       id: $id
     )
+    {
+      id
+      name
+      createdAt
+    }
   }
 `;
 export default UPDATE_FILM;

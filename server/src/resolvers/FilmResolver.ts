@@ -21,7 +21,7 @@ const Op = Sequelize.Op;
 
 @Resolver()
 export class FilmResolver {
-  @Mutation(() => Number)
+  @Mutation(() => FilmType)
   @UseMiddleware(isAuth, isAdmin)
   async addFilm(@Arg("input", () => FilmInput) input: FilmInput) {
     try {
@@ -42,12 +42,13 @@ export class FilmResolver {
         averageRating,
         coverImage: fileLocation,
       });
-      return createdFilm.id;
+      console.log(createdFilm);
+      return createdFilm;
     } catch (err) {
       console.log(err);
     }
   }
-  @Mutation(() => Number)
+  @Mutation(() => FilmType)
   @UseMiddleware(isAuth, isAdmin)
   async updateFilm(
     @Arg("id", () => Int) id: number,
@@ -61,7 +62,7 @@ export class FilmResolver {
 
       await Film.update(input, { where: { id: id } });
       const updatedFilm: any = await Film.findByPk(id);
-      return updatedFilm.id;
+      return updatedFilm;
     } catch (err) {
       console.log(err);
     }

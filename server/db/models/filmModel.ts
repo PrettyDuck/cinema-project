@@ -20,13 +20,13 @@ Film.init(
       type: DataTypes.STRING,
     },
     filmDescription: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     averageRating: {
       type: DataTypes.FLOAT,
     },
     coverImage: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
   },
   {

@@ -8,6 +8,7 @@ const LOGIN_USER = gql`
         id
         name
         email
+        role
       }
     }
   }

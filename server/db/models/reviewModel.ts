@@ -17,7 +17,7 @@ Review.init(
       type: DataTypes.INTEGER,
     },
     reviewText: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
   },
   {

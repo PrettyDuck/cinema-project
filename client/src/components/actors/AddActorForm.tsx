@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
-import GET_FILMS_ADMIN_QUERY from '../../graphql/queries/GetFilmsAdmin';
 import ADD_ACTOR from '../../graphql/mutations/AddActor';
 
 const AddActorForm: React.FC = () => {
-  const { refetch } = useQuery(GET_FILMS_ADMIN_QUERY);
 
   const [birthYear, setDate] = useState(new Date());
   const [name, setName] = useState('');
@@ -40,8 +38,7 @@ const AddActorForm: React.FC = () => {
         },
       });
       console.log(res);
-      await refetch();
-      return history.push('/');
+      return history.push('/admin');
     } catch (error) {
       console.log(error);
     }

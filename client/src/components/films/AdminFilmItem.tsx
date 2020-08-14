@@ -5,7 +5,6 @@ import GET_FILMS_ADMIN_QUERY from '../../graphql/queries/GetFilmsAdmin';
 import DELETE_FILM from '../../graphql/mutations/DeleteFilm';
 
 const AdminFilmItem: React.FC<{ film: AdminFilmItemType }> = ({ film }) => {
-  const { refetch } = useQuery(GET_FILMS_ADMIN_QUERY);
   const [deleteFilm] = useMutation(DELETE_FILM);
 
   const deleteItem = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -15,8 +14,19 @@ const AdminFilmItem: React.FC<{ film: AdminFilmItemType }> = ({ film }) => {
         variables: {
           id: film.id,
         },
+        update: (store, { data }) => {
+          if (!data) {
+            return null;
+          }
+          const existingFilms: any = store.readQuery({ query: GET_FILMS_ADMIN_QUERY });
+          store.writeQuery({
+            query: GET_FILMS_ADMIN_QUERY,
+            data: {
+              adminFilms: existingFilms.adminFilms.filter((f: AdminFilmItemType) => f.id !== film.id),
+            },
+          });
+        },
       });
-      refetch();
     } catch (error) {
       console.log(error);
     }

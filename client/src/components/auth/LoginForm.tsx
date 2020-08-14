@@ -47,7 +47,7 @@ const LoginForm: React.FC = () => {
           },
         });
         if (res.data) {
-          setAccessToken(res.data.login);
+          setAccessToken(res.data.login.accessToken);
         }
         history.push('/');
       }

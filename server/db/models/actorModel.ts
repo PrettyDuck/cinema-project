@@ -17,10 +17,10 @@ Actor.init(
       type: DataTypes.INTEGER,
     },
     actorBio: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     profilePhoto: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
   },
   {

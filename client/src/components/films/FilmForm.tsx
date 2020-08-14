@@ -45,8 +45,6 @@ const FilmForm: React.FC<any> = (props) => {
     GET_ACTORS_QUERY,
   );
 
-  const { refetch } = useQuery(GET_FILMS_ADMIN_QUERY);
-
   const categoriesOptions: any = [];
   const actorsOptions: any = [];
   useEffect(() => {
@@ -135,8 +133,29 @@ const FilmForm: React.FC<any> = (props) => {
         // res = created film ID
         const res = await updateFilm({
           variables: updatedFilm,
+          update: (store, { data }) => {
+            if (!data) {
+              return null;
+            }
+            // console.log(data);
+            const existingFilms: any = store.readQuery({ query: GET_FILMS_ADMIN_QUERY });
+            if (existingFilms.adminFilms) {
+              store.writeQuery({
+                query: GET_FILMS_ADMIN_QUERY,
+                data: {
+                  adminFilms: existingFilms.adminFilms.map((f: AdminFilmItemType) => {
+                    if (f.id === updatedFilm.id) {
+                      return { ...f, ...data.updateFilm };
+                    } else {
+                      return f;
+                    }
+                  }),
+                },
+              });
+            }
+          },
         });
-        console.log(res);
+        // console.log(res);
       } else {
         // res = created film ID
         const res = await addFilm({
@@ -148,13 +167,28 @@ const FilmForm: React.FC<any> = (props) => {
             averageRating: parseFloat(averageRating),
             coverImage: coverImage,
           },
+          update: (store, { data }) => {
+            if (!data) {
+              return null;
+            }
+            // console.log(data);
+            const existingFilms: any = store.readQuery({ query: GET_FILMS_ADMIN_QUERY });
+            if (existingFilms.adminFilms) {
+              store.writeQuery({
+                query: GET_FILMS_ADMIN_QUERY,
+                data: {
+                  adminFilms: [data.addFilm, ...existingFilms.adminFilms],
+                },
+              });
+            }
+          },
         });
-        console.log(res);
+        // console.log(res);
         for await (const category of selectedCategories) {
           const categoriesRes = await addFilmCategory({
             variables: {
               categoryId: category.value,
-              filmId: res.data.addFilm,
+              filmId: res.data.addFilm.id,
             },
           });
           console.log(categoriesRes);
@@ -163,13 +197,12 @@ const FilmForm: React.FC<any> = (props) => {
           const actorRes = await addFilmActor({
             variables: {
               actorId: actor.value,
-              filmId: res.data.addFilm,
+              filmId: res.data.addFilm.id,
             },
           });
           console.log(actorRes);
         }
       }
-      await refetch();
       return history.push('/admin');
     } catch (error) {
       console.log(error);

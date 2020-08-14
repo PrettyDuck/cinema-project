@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { RouteComponentProps } from 'react-router-dom';
 import GET_ACTOR_QUERY from '../../graphql/queries/GetActor';
 
-const Actor: React.FC<RouteComponentProps> = ({ match }) => {
+const Actor: React.FC<RouteComponentProps<{id:string}>> = ({ match }) => {
   const { data, loading, error } = useQuery(GET_ACTOR_QUERY, {
     variables: {
       id: parseInt(match.params.id),

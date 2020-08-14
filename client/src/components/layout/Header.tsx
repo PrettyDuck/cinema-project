@@ -34,21 +34,26 @@ const Header: React.FC = () => {
           {data && data.getCurrentUser ? (
             <span className=' text-white hover:text-teal-300'> Hi, {data.getCurrentUser.name}</span>
           ) : (
-            <span className=' text-white hover:text-teal-300'>Not logged in</span>
+            null
           )}
         </div>
-        <div className='text-lg'>
-          <Link to='/addActor' className=' text-white hover:text-teal-300'>
-            Add Actor
-          </Link>
-        </div>
-        <div className='text-lg'>
-          <button
-            className='focus:outline-none text-white hover:text-teal-300'
-            onClick={clickHandler}>
-            Add Film
-          </button>
-        </div>
+
+        {data && data.getCurrentUser && data.getCurrentUser.role === 'ADMIN_ROLE' ? (
+          <>
+            <div className='text-lg'>
+              <Link to='/addActor' className=' text-white hover:text-teal-300'>
+                Add Actor
+              </Link>
+            </div>
+            <div className='text-lg'>
+              <button
+                className='focus:outline-none text-white hover:text-teal-300'
+                onClick={clickHandler}>
+                Add Film
+              </button>
+            </div>
+          </>
+        ) : null}
         <div className='text-lg'>
           {data && data.getCurrentUser ? (
             <button

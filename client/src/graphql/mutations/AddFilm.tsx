@@ -19,6 +19,11 @@ const ADD_FILM = gql`
         coverImage: $coverImage
       }
     )
+    {
+      id
+      name
+      createdAt
+    }
   }
 `;
 export default ADD_FILM;

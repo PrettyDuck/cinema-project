@@ -1,13 +1,16 @@
-import { Query, Mutation, Arg, Resolver, Int } from "type-graphql";
+import { Query, Mutation, Arg, Resolver, Int, UseMiddleware } from "type-graphql";
 import ActorType from "../types/ActorType";
 import ActorInput from "../input-types/ActorInputs";
 import Actor from "../../db/models/actorModel";
 import Film from "../../db/models/filmModel";
 import storeFile from "../utills/storeFile";
+import { isAuth } from "../utills/isAuthMiddleware";
+import { isAdmin } from "../utills/isAdminMiddleware";
 
 @Resolver()
 export class ActorResolver {
   @Mutation(() => String)
+  @UseMiddleware(isAuth,isAdmin)
   async addActor(@Arg("input", () => ActorInput) input: ActorInput) {
     try {
       const { name, birthYear, actorBio, profilePhoto } = input;
@@ -24,6 +27,7 @@ export class ActorResolver {
     }
   }
   @Mutation(() => String)
+  @UseMiddleware(isAuth,isAdmin)
   async addFilmActor(
     @Arg("actorId", () => Int) actorId: number,
     @Arg("filmId", () => Int) filmId: number

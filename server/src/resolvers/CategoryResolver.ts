@@ -1,7 +1,9 @@
-import { Query, Mutation, Arg, Resolver, Int } from "type-graphql";
+import { Query, Mutation, Arg, Resolver, Int, UseMiddleware } from "type-graphql";
 import CategoryType from "../types/CategoryType";
 import Category from "../../db/models/categoryModel";
 import Film from "../../db/models/filmModel";
+import { isAuth } from "../utills/isAuthMiddleware";
+import { isAdmin } from "../utills/isAdminMiddleware";
 
 @Resolver()
 export class CategoryResolver {
@@ -15,6 +17,7 @@ export class CategoryResolver {
     }
   }
   @Mutation(() => String)
+  @UseMiddleware(isAuth,isAdmin)
   async addFilmCategory(
     @Arg("categoryId", () => Int) categoryId: number,
     @Arg("filmId", () => Int) filmId: number
