@@ -138,7 +138,6 @@ const FilmForm: React.FC<any> = (props) => {
               if (!data) {
                 return null;
               }
-              // console.log(data);
               const existingFilms: any = store.readQuery({ query: GET_FILMS_ADMIN_QUERY });
               if (existingFilms.adminFilms) {
                 store.writeQuery({

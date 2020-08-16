@@ -1,14 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import StarRatingComponent from 'react-star-rating-component';
-import reviewContext from '../../reviewContext';
 import { useMutation } from '@apollo/react-hooks';
 import ADD_NEW_FILM_REVIEW from '../../graphql/mutations/AddFilmReview';
 import GET_FILM_REVIEWS from '../../graphql/queries/GetFilmReviews';
+import { useApolloClient } from '@apollo/react-hooks';
+import GET_CURRENT_USER_QUERY from '../../graphql/queries/GetCurrentUser';
 
 const AddReview: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
-  const { dispatch } = useContext(reviewContext);
-
   // Manually update the cache after mutation
+  const client = useApolloClient();
   const [addReview] = useMutation(ADD_NEW_FILM_REVIEW, {
     update(cache, { data: { addReview } }) {
       const { reviews }: any = cache.readQuery({
@@ -20,19 +20,14 @@ const AddReview: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
         variables: { filmId: parseInt(targetFilmId) },
         data: { reviews: [addReview, ...reviews] },
       });
-      dispatch({
-        type: 'GET_REVIEWS',
-        payload: reviews,
-      });
     },
   });
   const [review, setReview] = useState({
     ratingPoint: 0,
-    ownerName: '',
     reviewText: '',
   });
 
-  const { ratingPoint, ownerName, reviewText } = review;
+  const { ratingPoint, reviewText } = review;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setReview({
@@ -50,21 +45,21 @@ const AddReview: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (ownerName === '' || reviewText === '') {
+    if (reviewText === '') {
       console.log('All fields needs to be filled');
     } else {
       addReview({
         variables: {
           filmId: parseInt(targetFilmId),
+          userId: client.readQuery({ query: GET_CURRENT_USER_QUERY }).getCurrentUser.id,
           ratingPoint: ratingPoint,
-          ownerName: ownerName,
+          ownerName: client.readQuery({ query: GET_CURRENT_USER_QUERY }).getCurrentUser.name,
           reviewText: reviewText,
         },
       });
 
       setReview({
         ratingPoint: 0,
-        ownerName: '',
         reviewText: '',
       });
     }
@@ -75,22 +70,13 @@ const AddReview: React.FC<{ targetFilmId: string }> = ({ targetFilmId }) => {
         <div className='flex flex-wrap'>
           <h2 className='px-4 py-2 text-gray-800 text-lg'>Post your own review</h2>
           <div className='w-full px-3 my-2'>
-            <input
-              type='text'
-              required
-              placeholder='Type your Name'
-              name='ownerName'
-              className='bg-gray-100 rounded border leading-normal w-full h-10 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'
-              onChange={onChange}
-              value={ownerName}
+            <StarRatingComponent
+              name='rating'
+              starCount={10}
+              value={ratingPoint}
+              onStarClick={changeRating}
             />
           </div>
-          <StarRatingComponent
-            name='rating'
-            starCount={10}
-            value={ratingPoint}
-            onStarClick={changeRating}
-          />
           <div className='w-full px-3 my-2'>
             <textarea
               className='bg-gray-100 rounded border leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'
