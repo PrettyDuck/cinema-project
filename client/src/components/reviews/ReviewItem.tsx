@@ -5,11 +5,12 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/react-hooks';
 import DELETE_REVIEW from '../../graphql/mutations/DeleteReview';
 import GET_FILM_REVIEWS from '../../graphql/queries/GetFilmReviews';
+import reviewDelIcon from '../../res/bin.svg';
 
 const ReviewItem: React.FC<{ review: ReviewType; user: any }> = ({ review, user }) => {
   const [deleteReview] = useMutation(DELETE_REVIEW);
 
-  const deleteItem = async (event: React.MouseEvent<SVGSVGElement>) => {
+  const deleteItem = async (event: React.MouseEvent<HTMLImageElement>) => {
     event.preventDefault();
     try {
       await deleteReview({
@@ -44,12 +45,19 @@ const ReviewItem: React.FC<{ review: ReviewType; user: any }> = ({ review, user 
       <h2 className=' text-gray-900 text-3xl font-semibold text-center truncate w-11/12'>
         {review.ownerName}
       </h2>
+      {user !== null && user.id === review.userId ? (
+        <img
+          src={reviewDelIcon}
+          height='20'
+          width='20'
+          alt='delete-review'
+          className='cursor-pointer'
+          onClick={deleteItem}
+        />
+      ) : null}
       <StarRatingComponent name='rating' starCount={10} value={review.ratingPoint} />
 
       <span className='mt-2 text-white text-center px-16 truncate w-full'>{review.reviewText}</span>
-      {user !== null && user.id === review.userId ? (
-        <FontAwesomeIcon className='cursor-pointer' icon={faTrash} onClick={deleteItem} />
-      ) : null}
     </div>
   );
 };
