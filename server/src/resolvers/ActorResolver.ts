@@ -26,26 +26,6 @@ export class ActorResolver {
       console.log(err);
     }
   }
-  @Mutation(() => String)
-  @UseMiddleware(isAuth,isAdmin)
-  async addFilmActor(
-    @Arg("actorId", () => Int) actorId: number,
-    @Arg("filmId", () => Int) filmId: number
-  ) {
-    try {
-      const targetActor: any = await Actor.findByPk(actorId);
-      const targetFilm: any = await Film.findByPk(filmId);
-      await targetFilm.addActor(targetActor);
-      const res: any = await Film.findOne({
-        where: { id: filmId },
-        include: Actor,
-      });
-      console.log(res.toJSON());
-      return `Relation between film with id:${filmId} and actor with id:${actorId} formed successfully`;
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   @Query(() => ActorType)
   async actor(@Arg("id", () => Int) id: number) {

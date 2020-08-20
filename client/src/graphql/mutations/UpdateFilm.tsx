@@ -8,6 +8,8 @@ const UPDATE_FILM = gql`
     $filmDescription: String
     $averageRating: Float
     $coverImage: Upload
+    $filmCategories: [Int!]
+    $filmActors: [Int!]
     $id: Int!
   ) {
     updateFilm(
@@ -19,6 +21,8 @@ const UPDATE_FILM = gql`
         averageRating: $averageRating
         coverImage: $coverImage
       }
+      filmCategories: $filmCategories
+      filmActors: $filmActors
       id: $id
     )
     {

@@ -5,11 +5,9 @@ import GET_CATEGORIES_QUERY from '../../graphql/queries/GetCategories';
 import GET_ACTORS_QUERY from '../../graphql/queries/GetActors';
 import GET_FILM_ADMIN_QUERY from '../../graphql/queries/GetFilmAdmin';
 import ADD_FILM from '../../graphql/mutations/AddFilm';
-import ADD_FILM_ACTOR from '../../graphql/mutations/AddFilmActor';
-import ADD_FILM_CATEGORY from '../../graphql/mutations/AddFilmCategory';
 import UPDATE_FILM from '../../graphql/mutations/UpdateFilm';
 import GET_FILMS_ADMIN_QUERY from '../../graphql/queries/GetFilmsAdmin';
-import MultiSelect from 'react-multi-select-component';
+import Select from 'react-select';
 
 interface SelectOption {
   label: string;
@@ -46,7 +44,6 @@ const FilmForm: React.FC<any> = (props) => {
   );
 
   const categoriesOptions: any = [];
-  const actorsOptions: any = [];
   useEffect(() => {
     if (!categoriesError && !categoriesLoading) {
       categoriesData.categories.map((category: CategoryType) =>
@@ -56,6 +53,7 @@ const FilmForm: React.FC<any> = (props) => {
     }
   }, [categoriesOptions]);
 
+  const actorsOptions: any = [];
   useEffect(() => {
     if (!actorsError && !actorsLoading) {
       actorsData.actors.map((actor: ActorType) =>
@@ -65,8 +63,8 @@ const FilmForm: React.FC<any> = (props) => {
     }
   }, [actorsOptions]);
 
-  const [selectedCategories, setSelectedCategories] = useState<SelectOption[]>([]);
-  const [selectedAuthors, setSelectedAuthors] = useState<SelectOption[]>([]);
+  const [selectedCategories, setSelectedCategories]: any = useState<SelectOption[]>([]);
+  const [selectedAuthors, setSelectedAuthors]: any = useState<SelectOption[]>([]);
 
   const [name, setName] = useState('');
   const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value);
@@ -110,9 +108,6 @@ const FilmForm: React.FC<any> = (props) => {
   const history = useHistory();
 
   const [addFilm] = useMutation(ADD_FILM);
-  const [addFilmActor] = useMutation(ADD_FILM_ACTOR);
-  const [addFilmCategory] = useMutation(ADD_FILM_CATEGORY);
-
   const [updateFilm] = useMutation(UPDATE_FILM);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -128,9 +123,13 @@ const FilmForm: React.FC<any> = (props) => {
         if (averageRating !== filmData.film.averageRating)
           updatedFilm.averageRating = averageRating;
         if (coverImage.name !== 'name') updatedFilm.coverImage = coverImage;
+        // Difference between
+        const categoriesDifference = selectedCategories.filter(
+          (x: any) => !tempCategories.includes(x),
+        );
+        const actorDifference = selectedCategories.filter((x: any) => !tempCategories.includes(x));
 
         console.log(updatedFilm);
-        // res = created film ID
         const res = await updateFilm({
           variables: updatedFilm,
           update: (store, { data }) => {
@@ -160,7 +159,6 @@ const FilmForm: React.FC<any> = (props) => {
         });
         // console.log(res);
       } else {
-        // res = created film ID
         const res = await addFilm({
           variables: {
             name: name,
@@ -169,6 +167,8 @@ const FilmForm: React.FC<any> = (props) => {
             filmDescription: filmDescription,
             averageRating: parseFloat(averageRating),
             coverImage: coverImage,
+            filmCategories: selectedCategories.map((c: SelectOption) => c.value),
+            filmActors: selectedAuthors.map((a: SelectOption) => a.value),
           },
           update: (store, { data }) => {
             try {
@@ -191,24 +191,6 @@ const FilmForm: React.FC<any> = (props) => {
           },
         });
         // console.log(res);
-        for await (const category of selectedCategories) {
-          const categoriesRes = await addFilmCategory({
-            variables: {
-              categoryId: category.value,
-              filmId: res.data.addFilm.id,
-            },
-          });
-          console.log(categoriesRes);
-        }
-        for await (const actor of selectedAuthors) {
-          const actorRes = await addFilmActor({
-            variables: {
-              actorId: actor.value,
-              filmId: res.data.addFilm.id,
-            },
-          });
-          console.log(actorRes);
-        }
       }
       return history.push('/admin');
     } catch (error) {
@@ -244,12 +226,11 @@ const FilmForm: React.FC<any> = (props) => {
               <div className='my-2 mx-6'>
                 <label>Film Categories:</label>
                 <br />
-                <MultiSelect
+                <Select
                   options={categoriesOptions}
                   value={selectedCategories}
                   onChange={setSelectedCategories}
-                  labelledBy={'SelectCategories'}
-                  className='outline-none'
+                  isMulti
                 />
               </div>
               <div className='my-2 mx-6'>
@@ -307,12 +288,11 @@ const FilmForm: React.FC<any> = (props) => {
               <div className='my-2 mx-6'>
                 {props.isUpdate ? <label>Update film Stars:</label> : <label>Choose Stars:</label>}
                 <br />
-                <MultiSelect
+                <Select
                   options={actorsOptions}
                   value={selectedAuthors}
                   onChange={setSelectedAuthors}
-                  labelledBy={'SelectActors'}
-                  className='outline-none'
+                  isMulti
                 />
               </div>
               <div className='my-2 mx-6'>

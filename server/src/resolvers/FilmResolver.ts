@@ -32,6 +32,8 @@ export class FilmResolver {
         filmDescription,
         averageRating,
         coverImage,
+        filmCategories,
+        filmActors,
       } = input;
       const fileLocation = await storeFile(coverImage);
       const createdFilm: any = await Film.create({
@@ -43,6 +45,22 @@ export class FilmResolver {
         coverImage: fileLocation,
       });
       console.log(createdFilm);
+      for await (const id of filmCategories) {
+        const targetCategory = await Category.findByPk(id);
+        await createdFilm.addCategory(targetCategory);
+        console.log(
+          `Relation between film with id:${createdFilm.id} and category with id:${id} formed successfully`
+        );
+      }
+
+      for await (const id of filmActors) {
+        const targetActor = await Actor.findByPk(id);
+        await createdFilm.addActor(targetActor);
+        console.log(
+          `Relation between film with id:${createdFilm.id} and actor with id:${id} formed successfully`
+        );
+      }
+
       return createdFilm;
     } catch (err) {
       console.log(err);
@@ -59,7 +77,7 @@ export class FilmResolver {
         const fileLocation = await storeFile(input.coverImage);
         input.coverImage = fileLocation;
       }
-
+      
       await Film.update(input, { where: { id: id } });
       const updatedFilm: any = await Film.findByPk(id);
       return updatedFilm;

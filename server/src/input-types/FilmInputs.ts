@@ -15,6 +15,10 @@ class FilmInput {
   averageRating!: number;
   @Field(() => GraphQLUpload)
   coverImage!: FileUpload;
+  @Field(() => [Int])
+  filmCategories!: [number];
+  @Field(() => [Int])
+  filmActors!: [number];
 }
 
 @InputType()
@@ -31,6 +35,10 @@ class FilmUpdateInput {
   averageRating?: number;
   @Field(() => GraphQLUpload, { nullable: true })
   coverImage?: FileUpload;
+  @Field(() => [Int], { nullable: true })
+  filmCategories!: [number];
+  @Field(() => [Int], { nullable: true })
+  filmActors!: [number];
 }
 
 export { FilmInput, FilmUpdateInput };
