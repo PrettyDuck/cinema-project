@@ -77,7 +77,7 @@ export class FilmResolver {
         const fileLocation = await storeFile(input.coverImage);
         input.coverImage = fileLocation;
       }
-      
+
       await Film.update(input, { where: { id: id } });
       const updatedFilm: any = await Film.findByPk(id);
       return updatedFilm;
@@ -114,42 +114,43 @@ export class FilmResolver {
   async films(
     @Arg("limit", () => Int, { nullable: true }) limit: number,
     @Arg("cursor", () => String, { nullable: true }) cursor: string,
-    @Arg("filter", () => String, { nullable: true }) filter: string
+    @Arg("nameSearch", () => String, { nullable: true }) nameSearch: string,
+    @Arg("categoryFilter", () => Int, { nullable: true })
+    categoryFilter: number,
+    @Arg("yearFilter", () => Int, { nullable: true }) yearFilter: number
   ) {
     try {
       const options: any = {
-        include: Category,
         order: [["createdAt", "DESC"]],
+        where: {},
       };
-      if (filter) {
-        options.where = {
-          name: {
-            [Op.substring]: filter,
+
+      if (categoryFilter && categoryFilter !== 0) {
+        options.include = [
+          {
+            model: Category,
+            where: { id: categoryFilter },
           },
-        };
-        const res = await Film.findAll(options);
-        return { filmsData: res };
+        ];
       } else {
-        if (cursor) {
-          options.where = {
-            createdAt: {
-              [Op.lt]: cursor,
-            },
-          };
-        }
-        if (limit) {
-          options.limit = limit;
-        }
-        const res = await Film.findAll(options);
-        if (limit) {
-          let hasMore = true;
-          if (res.length < limit) {
-            hasMore = false;
-          }
-          return { filmsData: res, hasMore: hasMore };
-        }
-        return { filmsData: res };
+        options.include = Category;
       }
+      if (nameSearch) options.where.name = { [Op.substring]: nameSearch };
+      if (yearFilter && yearFilter !== 0)
+        options.where.year = {
+          [Op.and]: [{ [Op.lt]: yearFilter + 9 }, { [Op.gte]: yearFilter }],
+        };
+      if (cursor) options.where.createdAt = { [Op.lt]: cursor };
+      if (limit) options.limit = limit;
+      const res = await Film.findAll(options);
+      if (limit) {
+        let hasMore = true;
+        if (res.length < limit) {
+          hasMore = false;
+        }
+        return { filmsData: res, hasMore: hasMore };
+      }
+      return { filmsData: res };
     } catch (err) {
       console.log(err);
     }

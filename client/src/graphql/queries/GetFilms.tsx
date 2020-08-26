@@ -1,8 +1,20 @@
 import gql from 'graphql-tag';
 
 const GET_FILMS_QUERY = gql`
-  query GetFilms($limit: Int!, $cursor: String) {
-    films(limit: $limit, cursor: $cursor) {
+  query GetFilms(
+    $limit: Int!
+    $cursor: String
+    $searchText: String
+    $categoryFilter: Int
+    $yearFilter: Int
+  ) {
+    films(
+      limit: $limit
+      cursor: $cursor
+      nameSearch: $searchText
+      categoryFilter: $categoryFilter
+      yearFilter: $yearFilter
+    ) {
       filmsData {
         id
         name
