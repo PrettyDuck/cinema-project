@@ -5,43 +5,46 @@ import GET_FILMS_QUERY from '../../graphql/queries/GetFilms';
 import { Waypoint } from 'react-waypoint';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useApolloClient } from '@apollo/react-hooks';
+
+type FilmDataType = {
+  filmsData: FilmItemType[];
+  hasMore: boolean;
+};
 
 const Films: React.FC = () => {
-  const client = useApolloClient();
-
-  const { data, loading, error, fetchMore } = useQuery(GET_FILMS_QUERY, {
+  const { loading, error, fetchMore } = useQuery(GET_FILMS_QUERY, {
     variables: {
       limit: 12,
     },
-    onCompleted: (d) => {
-      setFilms(d.films.filmsData);
+    onCompleted: (data) => {
+      setFilms(data.films);
     },
   });
 
-  const [films, setFilms] = useState<FilmItemType[]>();
-  const [searchedFilms, setSearchedFilms] = useState<FilmItemType[]>();
+  const [films, setFilms] = useState<FilmDataType>();
+  const [searchedFilms, setSearchedFilms] = useState<FilmDataType>();
   const [searchText, setSearchText] = useState('');
   const [categoryFilter, setCategoryFilter] = useState(0);
   const [yearFilter, setYearFilter] = useState(0);
 
   const [searchFilms] = useLazyQuery(GET_FILMS_QUERY, {
-    onCompleted: (d) => {
-      setFilms(d.films.filmsData);
-      setSearchedFilms(d.films.filmsData);
+    onCompleted: (data) => {
+      setFilms(data.films);
+      setSearchedFilms(data.films);
     },
   });
   const onChangeSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
     if (e.target.value === '' && searchedFilms !== undefined) {
       setSearchedFilms(undefined);
-      const { data: refechedData } = await client.query({
-        query: GET_FILMS_QUERY,
+      searchFilms({
         variables: {
           limit: 12,
+          searchText: e.target.value,
+          categoryFilter: categoryFilter,
+          yearFilter: yearFilter,
         },
       });
-      setFilms(refechedData.films.filmsData);
     }
   };
   const onChangeCategorySelect = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -85,7 +88,7 @@ const Films: React.FC = () => {
     <>
       {loading && <div>Loading...</div>}
       {error && <div>{error.message}</div>}
-      {films !== undefined && (
+      {films?.filmsData !== undefined && (
         <>
           <div className='container mx-auto px-4 pt-8'>
             <div className='bg-white flex items-center rounded-md shadow-2xl'>
@@ -142,46 +145,77 @@ const Films: React.FC = () => {
             </div>
           </div>
           <div className='grid gap-2 grid-cols-4 mx-24 my-12'>
-            {films.map((film: FilmItemType, index: number) => (
+            {films.filmsData.map((film: FilmItemType, index: number) => (
               <React.Fragment key={index}>
                 <FilmItem film={film} key={film.id} />
 
                 {/* Infinine scroll block */}
-                {searchedFilms === undefined && index === data.films.filmsData.length - 1 && (
+                {index === films.filmsData.length - 1 && (
                   <Waypoint
                     onEnter={() => {
-                      if (data.films.hasMore) {
-                        fetchMore({
-                          variables: {
-                            limit: 4,
-                            cursor: data.films.filmsData[data.films.filmsData.length - 1].createdAt,
-                          },
-                          updateQuery: (previousVal: any, { fetchMoreResult }: any) => {
-                            if (!fetchMoreResult) {
-                              return previousVal;
-                            }
-                            const res: {
-                              films: {
-                                filmsData: FilmItemType[];
-                                hasMore: boolean;
-                                __typename: string;
+                      if (films.hasMore) {
+                        const query_Vars: any = {
+                          limit: 4,
+                          cursor: films.filmsData[films.filmsData.length - 1].createdAt,
+                        };
+                        if (searchedFilms !== undefined) {
+                          query_Vars.searchText = searchText;
+                          query_Vars.categoryFilter = categoryFilter;
+                          query_Vars.yearFilter = yearFilter;
+                          fetchMore({
+                            variables: query_Vars,
+                            // WHEN WE HAVE SEARCHED FILMS, WE NEED TO BASE PEVIOUS DATA NOT ON PREVIOUS VALUE, BUT ON SEARCHED FILMS STATE
+                            updateQuery: (previousVal: any, { fetchMoreResult }: any) => {
+                              if (!fetchMoreResult) {
+                                return searchedFilms;
+                              }
+                              const res: {
+                                films: {
+                                  filmsData: FilmItemType[];
+                                  hasMore: boolean;
+                                };
+                              } = {
+                                films: {
+                                  filmsData: [
+                                    ...searchedFilms.filmsData,
+                                    ...fetchMoreResult.films.filmsData,
+                                  ],
+                                  hasMore: fetchMoreResult.films.hasMore,
+                                },
                               };
-                            } = {
-                              films: {
-                                filmsData: [
-                                  ...previousVal.films.filmsData,
-                                  ...fetchMoreResult.films.filmsData,
-                                ],
-                                hasMore: fetchMoreResult.films.hasMore,
-                                __typename: 'GetFilmsResponseType',
-                              },
-                            };
-                            setFilms(res.films.filmsData);
-                            return res;
-                          },
-                        });
-                        console.log(index);
+                              setFilms(res.films);
+                              setSearchedFilms(res.films);
+                              return res;
+                            },
+                          });
+                        } else {
+                          fetchMore({
+                            variables: query_Vars,
+                            updateQuery: (previousVal: any, { fetchMoreResult }: any) => {
+                              if (!fetchMoreResult) {
+                                return previousVal;
+                              }
+                              const res: {
+                                films: {
+                                  filmsData: FilmItemType[];
+                                  hasMore: boolean;
+                                };
+                              } = {
+                                films: {
+                                  filmsData: [
+                                    ...previousVal.films.filmsData,
+                                    ...fetchMoreResult.films.filmsData,
+                                  ],
+                                  hasMore: fetchMoreResult.films.hasMore,
+                                },
+                              };
+                              setFilms(res.films);
+                              return res;
+                            },
+                          });
+                        }
                       }
+                      console.log(index);
                     }}
                   />
                 )}

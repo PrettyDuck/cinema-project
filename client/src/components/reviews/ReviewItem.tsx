@@ -1,7 +1,5 @@
 import React from 'react';
 import StarRatingComponent from 'react-star-rating-component';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/react-hooks';
 import DELETE_REVIEW from '../../graphql/mutations/DeleteReview';
 import GET_FILM_REVIEWS from '../../graphql/queries/GetFilmReviews';
