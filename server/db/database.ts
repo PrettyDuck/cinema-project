@@ -1,8 +1,9 @@
 import { Sequelize } from "sequelize";
+import "dotenv/config"
 
-const sequelize = new Sequelize("filmsdb", "root", "Redoctopus353", {
-  host: "localhost",
-  // host: "mysqlHost",
+const sequelize = new Sequelize("filmsdb", process.env.DB_USER!, process.env.DB_PASS, {
+  // host: "localhost",
+  host: "mysqlHost",
   dialect: "mysql",
 });
 

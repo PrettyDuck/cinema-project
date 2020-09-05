@@ -99,7 +99,7 @@ const LoginForm: React.FC = () => {
               alt='show-password'
               className='absolute'
               onClick={showHidePassword}
-              style={{ marginLeft: '450px', marginTop: '-30px' }}
+              style={{ left: 575, top: 40 }}
             />
           </div>
           <input

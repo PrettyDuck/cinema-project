@@ -16,8 +16,8 @@ import initRelations from "../db/relations";
 import refreshTokenRoute from "./routes/refreshTokenRoute";
 
 (async () => {
-  const app = express();
   dotenv.config();
+  const app = express();
   app.use(
     cors({
       origin: "http://localhost:3000",

@@ -5,7 +5,7 @@ services:
     image: mysql
     container_name: mysqlHost
     environment:
-      MYSQL_ROOT_PASSWORD: Redoctopus353
+      MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: filmsdb
     ports:
       - "3306:3306"
